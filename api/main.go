@@ -23,7 +23,7 @@ func main() {
 	fmt.Println(getDataById(apiData.artists, 1))
 }
 
-func extractRawData(url string) []byte {
+func ExtractRawData(url string) []byte {
 	resp, err := http.Get(url)
 	if err != nil {
 		fmt.Println("Error loading the API : ",url)
@@ -39,7 +39,7 @@ func extractRawData(url string) []byte {
 	return rawData
 }
 
-func initializeData() datasJson {
+func InitializeData() datasJson {
 	var apiData datasJson
 	json.Unmarshal(extractRawData(apiUrls[0]), &apiData.artists)
 	json.Unmarshal(extractRawData(apiUrls[1]), &apiData.locations)
@@ -49,7 +49,7 @@ func initializeData() datasJson {
 	return apiData
 }
 
-func getId(artistsData apiStructures.Artists, name string) int {
+func GetId(artistsData apiStructures.Artists, name string) int {
 	for _, i := range artistsData {
 		if i.Name == name {
 			return i.ID
@@ -58,7 +58,7 @@ func getId(artistsData apiStructures.Artists, name string) int {
 	return -1
 }
 
-func getDataById(artistsData apiStructures.Artists, id int) []string {
+func GetDataById(artistsData apiStructures.Artists, id int) []string {
 	var groupData []string
 	for _, i := range artistsData {
 		if (id == i.ID) {
@@ -87,3 +87,5 @@ func getDataById(artistsData apiStructures.Artists, id int) []string {
 
 	return groupData
 }
+
+func Concerts
