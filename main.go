@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"html/template"
 	"fmt"
+	api "apiFunctions/api"
 )
 
 // Variables envoyées au code html
@@ -15,13 +16,14 @@ type Data struct {
 
 }
 
-func main() {	
+func main() {
+	data := api.InitializeData()
+	fmt.Println(data)
 
 	fs := http.FileServer(http.Dir("./static/assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 	http.HandleFunc("/", Handler)
 	http.ListenAndServe(":8080", nil)
-
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {

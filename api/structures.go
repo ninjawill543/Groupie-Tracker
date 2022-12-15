@@ -1,4 +1,4 @@
-package structures
+package apiFunctions
 
 type Artists []struct {	
 	ID           int      `json:"id"`

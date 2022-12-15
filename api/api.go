@@ -1,7 +1,6 @@
-package main
+package apiFunctions
 
 import (
-	apiStructures "structures/structures"
 	"fmt"
 	"net/http"
 	"io/ioutil"
@@ -12,16 +11,10 @@ import (
 var apiUrls = [4]string{"https://groupietrackers.herokuapp.com/api/artists", "https://groupietrackers.herokuapp.com/api/locations", "https://groupietrackers.herokuapp.com/api/dates", "https://groupietrackers.herokuapp.com/api/relation"}
 
 type datasJson struct {
-	artists apiStructures.Artists
-	locations apiStructures.Locations
-	dates apiStructures.Dates
-	relations apiStructures.Relations
-}
-
-func main() {
-	apiData := InitializeData()
-	fmt.Println(GetDataById(apiData.artists, 1))
-	fmt.Println(GetConcertsById(apiData.locations, apiData.dates, 1))
+	artists Artists
+	locations Locations
+	dates Dates
+	relations Relations
 }
 
 func ExtractRawData(url string) []byte {
@@ -45,12 +38,12 @@ func InitializeData() datasJson {
 	json.Unmarshal(ExtractRawData(apiUrls[0]), &apiData.artists)
 	json.Unmarshal(ExtractRawData(apiUrls[1]), &apiData.locations)
 	json.Unmarshal(ExtractRawData(apiUrls[2]), &apiData.dates)
-	json.Unmarshal(ExtractRawData(apiUrls[3]), &apiData.relations)
+	// json.Unmarshal(ExtractRawData(apiUrls[3]), &apiData.relations)
 
 	return apiData
 }
 
-func GetId(artistsData apiStructures.Artists, name string) int {
+func GetId(artistsData Artists, name string) int {
 	for _, i := range artistsData {
 		if i.Name == name {
 			return i.ID
@@ -59,7 +52,7 @@ func GetId(artistsData apiStructures.Artists, name string) int {
 	return -1
 }
 
-func GetDataById(artistsData apiStructures.Artists, id int) []string {
+func GetDataById(artistsData Artists, id int) []string {
 	var groupData []string
 	for _, i := range artistsData {
 		if (id == i.ID) {
@@ -84,7 +77,7 @@ func GetDataById(artistsData apiStructures.Artists, id int) []string {
 	return groupData
 }
 
-func GetConcertsById(locationData apiStructures.Locations, dateData apiStructures.Dates, id int) []string {
+func GetConcertsById(locationData Locations, dateData Dates, id int) []string {
 	var concertsData []string
 	for _, i := range locationData.Index {
 		if id == i.ID {
