@@ -8,43 +8,42 @@ import (
 	"encoding/json"
 )
 
-var artistsUrl = "https://groupietrackers.herokuapp.com/api/artists"
-var locationsUrl = "https://groupietrackers.herokuapp.com/api/locations"
-var datesUrl = "https://groupietrackers.herokuapp.com/api/dates"
-var relationsUrl = "https://groupietrackers.herokuapp.com/api/relation"
+var apiUrls = [4]string{"https://groupietrackers.herokuapp.com/api/artists", "https://groupietrackers.herokuapp.com/api/locations", "https://groupietrackers.herokuapp.com/api/dates", "https://groupietrackers.herokuapp.com/api/relation"}
 
-func main() {
-	var rawData []byte
-	
-	rawData = extractData(artistsUrl)
-	artistsData := apiStructures.Artists{}
-	json.Unmarshal(rawData, &artistsData)
-
-	rawData = extractData(locationsUrl)
-	locationData := apiStructures.Locations{}
-	json.Unmarshal(rawData, &locationData)
-
-	rawData = extractData(datesUrl)
-	datesData := apiStructures.Dates{}
-	json.Unmarshal(rawData, &datesData)
-
-	rawData = extractData(relationsUrl)
-	relationsData := apiStructures.Relations{}
-	json.Unmarshal(rawData, &relationsData)
+type datasJson struct {
+	artists apiStructures.Artists
+	locations apiStructures.Locations
+	dates apiStructures.Dates
+	relations apiStructures.Relations
 }
 
-func extractData (url string) []byte {
+func main () {
+	apiData := initializeData()
+	fmt.Println(apiData.artists)
+}
+
+func extractRawData (url string) []byte {
 	resp, err := http.Get(url)
 	if err != nil {
-		fmt.Println("Error loading the API.")
+		fmt.Println("Error loading the API : ",url)
 		panic(err)
 	}
 
 	rawData, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println("Error reading the response body.")
+		fmt.Println("Error reading the response body : ",url,"\n",resp)
 		panic(err)
 	}
 
 	return rawData
+}
+
+func initializeData () datasJson {
+	var apiData datasJson
+	json.Unmarshal(extractRawData(apiUrls[0]), &apiData.artists)
+	json.Unmarshal(extractRawData(apiUrls[1]), &apiData.locations)
+	json.Unmarshal(extractRawData(apiUrls[2]), &apiData.dates)
+	json.Unmarshal(extractRawData(apiUrls[3]), &apiData.relations)
+
+	return apiData
 }
