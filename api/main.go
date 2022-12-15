@@ -1,38 +1,12 @@
 package main
 
 import (
+	apiStructures "structures/structures"
 	"fmt"
 	"net/http"
 	"io/ioutil"
 	"encoding/json"
 )
-
-type artists []struct {
-	ID           int      `json:"id"`
-	Image        string   `json:"image"`
-	Name         string   `json:"name"`
-	Members      []string `json:"members"`
-	CreationDate int      `json:"creationDate"`
-	FirstAlbum   string   `json:"firstAlbum"`
-	Locations    string   `json:"locations"`
-	ConcertDates string   `json:"concertDates"`
-	Relations    string   `json:"relations"`
-}
-
-type locations struct {
-	Index []struct {
-		ID        int      `json:"id"`
-		Locations []string `json:"locations"`
-		Dates     string   `json:"dates"`
-	} `json:"index"`
-}
-
-type dates struct {
-	Index []struct {
-		ID    int      `json:"id"`
-		Dates []string `json:"dates"`
-	} `json:"index"`
-}
 
 var artistsUrl = "https://groupietrackers.herokuapp.com/api/artists"
 var locationsUrl = "https://groupietrackers.herokuapp.com/api/locations"
@@ -54,26 +28,14 @@ func main() {
 		panic(err)
 	}
 
-	
-	// fmt.Println(string(respData))
- 	/*
-	var m map[string]interface{}
-	json.Unmarshal(respData, &m)
-
-	fmt.Println(m)
-	*/
-
-	
-	data := locations{}
+	data := apiStructures.Locations{}
 	json.Unmarshal(respData, &data)
 
 	fmt.Println(data)
 
-	
 	for _, i := range data.Index {
 		fmt.Println(i.Locations)
 	}
-	
 }
 
 
