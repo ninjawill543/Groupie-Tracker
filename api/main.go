@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"io/ioutil"
 	"encoding/json"
+	"strconv"
 )
 
 var apiUrls = [4]string{"https://groupietrackers.herokuapp.com/api/artists", "https://groupietrackers.herokuapp.com/api/locations", "https://groupietrackers.herokuapp.com/api/dates", "https://groupietrackers.herokuapp.com/api/relation"}
@@ -17,12 +18,12 @@ type datasJson struct {
 	relations apiStructures.Relations
 }
 
-func main () {
+func main() {
 	apiData := initializeData()
-	fmt.Println(apiData.artists)
+	fmt.Println(getDataById(apiData.artists, 1))
 }
 
-func extractRawData (url string) []byte {
+func extractRawData(url string) []byte {
 	resp, err := http.Get(url)
 	if err != nil {
 		fmt.Println("Error loading the API : ",url)
@@ -38,7 +39,7 @@ func extractRawData (url string) []byte {
 	return rawData
 }
 
-func initializeData () datasJson {
+func initializeData() datasJson {
 	var apiData datasJson
 	json.Unmarshal(extractRawData(apiUrls[0]), &apiData.artists)
 	json.Unmarshal(extractRawData(apiUrls[1]), &apiData.locations)
@@ -46,4 +47,43 @@ func initializeData () datasJson {
 	json.Unmarshal(extractRawData(apiUrls[3]), &apiData.relations)
 
 	return apiData
+}
+
+func getId(artistsData apiStructures.Artists, name string) int {
+	for _, i := range artistsData {
+		if i.Name == name {
+			return i.ID
+		}
+	}
+	return -1
+}
+
+func getDataById(artistsData apiStructures.Artists, id int) []string {
+	var groupData []string
+	for _, i := range artistsData {
+		if (id == i.ID) {
+			groupData = append(groupData, strconv.Itoa(i.ID))
+			groupData = append(groupData, "§")
+			groupData = append(groupData, i.Image)
+			groupData = append(groupData, "§")
+			groupData = append(groupData, i.Name)
+			groupData = append(groupData, "§")
+			for _, k := range i.Members {
+				groupData = append(groupData, k)
+			}
+			groupData = append(groupData, "§")
+			groupData = append(groupData, strconv.Itoa(i.CreationDate))
+			groupData = append(groupData, "§")
+			groupData = append(groupData, i.FirstAlbum)
+			groupData = append(groupData, "§")
+			groupData = append(groupData, i.Locations)
+			groupData = append(groupData, "§")
+			groupData = append(groupData, i.ConcertDates)
+			groupData = append(groupData, "§")
+			groupData = append(groupData, i.Relations)
+			break
+		}
+	}
+
+	return groupData
 }
