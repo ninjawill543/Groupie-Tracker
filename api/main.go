@@ -19,8 +19,9 @@ type datasJson struct {
 }
 
 func main() {
-	apiData := initializeData()
-	fmt.Println(getDataById(apiData.artists, 1))
+	apiData := InitializeData()
+	fmt.Println(GetDataById(apiData.artists, 1))
+	fmt.Println(GetConcertsById(apiData.locations, apiData.dates, 1))
 }
 
 func ExtractRawData(url string) []byte {
@@ -41,10 +42,10 @@ func ExtractRawData(url string) []byte {
 
 func InitializeData() datasJson {
 	var apiData datasJson
-	json.Unmarshal(extractRawData(apiUrls[0]), &apiData.artists)
-	json.Unmarshal(extractRawData(apiUrls[1]), &apiData.locations)
-	json.Unmarshal(extractRawData(apiUrls[2]), &apiData.dates)
-	json.Unmarshal(extractRawData(apiUrls[3]), &apiData.relations)
+	json.Unmarshal(ExtractRawData(apiUrls[0]), &apiData.artists)
+	json.Unmarshal(ExtractRawData(apiUrls[1]), &apiData.locations)
+	json.Unmarshal(ExtractRawData(apiUrls[2]), &apiData.dates)
+	json.Unmarshal(ExtractRawData(apiUrls[3]), &apiData.relations)
 
 	return apiData
 }
@@ -76,11 +77,6 @@ func GetDataById(artistsData apiStructures.Artists, id int) []string {
 			groupData = append(groupData, "§")
 			groupData = append(groupData, i.FirstAlbum)
 			groupData = append(groupData, "§")
-			groupData = append(groupData, i.Locations)
-			groupData = append(groupData, "§")
-			groupData = append(groupData, i.ConcertDates)
-			groupData = append(groupData, "§")
-			groupData = append(groupData, i.Relations)
 			break
 		}
 	}
@@ -88,4 +84,26 @@ func GetDataById(artistsData apiStructures.Artists, id int) []string {
 	return groupData
 }
 
-func Concerts
+func GetConcertsById(locationData apiStructures.Locations, dateData apiStructures.Dates, id int) []string {
+	var concertsData []string
+	for _, i := range locationData.Index {
+		if id == i.ID {
+			for _, k := range i.Locations {
+				concertsData = append(concertsData, k)
+				concertsData = append(concertsData, " ")
+				concertsData = append(concertsData, "§")
+			}
+		}
+	}
+	index := 1;
+	for _, i := range dateData.Index {
+		if id == i.ID {
+			for _, k := range i.Dates {
+				concertsData[index] = k
+				index += 3
+			}
+		}
+	}
+
+	return concertsData
+}
