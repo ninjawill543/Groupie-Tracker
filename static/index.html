@@ -31,69 +31,33 @@
         <!-- Affichage des cards -->
         <div class="cards">
             <!-- Récupération de la card -->
-            {{ .artists }}
-            <!-- {{ range $key, $value := .test }}
+            {{ range $key, $value := .Artists }}
             <div class="card">
-                <img src="./assets/img/queen.jpeg" alt="queen">
+                <img src={{ $value.Image }} alt={{ $value.Name }}>
                 <div class="info-card">
-                    <h4>{{ $value }}</h4>
-                    <p>{{ $value }}</p>
+                    <h4>{{ $value.Name }}</h4>
+                    <p>{{ $value.Members }}</p>
                         <a class="button" href="#popup{{ $key }}">Show</a>
                 </div>
                 <div id="popup{{ $key }}" class="overlay">
                     <div class="popup">
-                        <h2>Information {{ $key }}</h2>
                         <a class="close" href="#">&times;</a>
                         <div class="content">
+                            <div>
+                                <h2>Nom: {{ $value.Name }}</h2>
+                                <p>Membres: {{ $value.Members }}</p>
+                                <p>Date de création: {{ $value.CreationDate }}</p>
+                                <p>Première album: {{ $value.FirstAlbum }}</p>
+                                <h2>Concert:</h2>
+                            </div>
+                            <div>
+                                <img src={{ $value.Image }} alt={{ $value.Name }}>
+                            </div>
                         </div>
                     </div>
                  </div>
             </div>
-            {{ end }} -->
-            <div class="card">
-                <img src="./assets/img/queen.jpeg" alt="queen">
-                <div class="info-card">
-                    <h4>Queen</h4>
-                    <p>Freddie Mercury, <br>
-                        Brian May, <br>
-                        John Daecon, <br>
-                        Roger Meddows-Taylor, <br> 
-                        Mike Grose, <br>
-                        Barry Mitchell, <br>
-                        Doug Fogie</p>
-                        <a class="button" href="#popup1">Show</a>
-                </div>
-                <div id="popup1" class="overlay">
-                    <div class="popup">
-                        <h2>Information 1</h2>
-                        <a class="close" href="#">&times;</a>
-                        <div class="content">
-                        </div>
-                    </div>
-                 </div>
-            </div>
-            <div class="card">
-                <img src="./assets/img/queen.jpeg" alt="queen">
-                <div class="info-card">
-                    <h4>Queen</h4>
-                    <p>Freddie Mercury, <br>
-                        Brian May, <br>
-                        John Daecon, <br>
-                        Roger Meddows-Taylor, <br> 
-                        Mike Grose, <br>
-                        Barry Mitchell, <br>
-                        Doug Fogie</p>
-                    <a class="button" href="#popup2">Show</a>
-                </div>
-                <div id="popup2" class="overlay">
-                    <div class="popup">
-                        <h2>Information 2</h2>
-                        <a class="close" href="#">&times;</a>
-                        <div class="content">
-                        </div>
-                    </div>
-                 </div>
-            </div>
+            {{ end }}
         </div>
     </main>
     <footer>
