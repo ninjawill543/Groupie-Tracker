@@ -1,3 +1,7 @@
+/*
+Interargit avec l'api donné : https://groupietrackers.herokuapp.com/api/
+*/
+
 package apiFunctions
 
 import (
@@ -8,33 +12,39 @@ import (
 	"strconv"
 )
 
+// Contient les urls de l'api
 var apiUrls = [4]string{"https://groupietrackers.herokuapp.com/api/artists", "https://groupietrackers.herokuapp.com/api/locations", "https://groupietrackers.herokuapp.com/api/dates", "https://groupietrackers.herokuapp.com/api/relation"}
 
+// Structure pour contenir les données de l'api
 type datasJson struct {
-	artists Artists
-	locations Locations
-	dates Dates
-	relations Relations
+	artists Artists // Informations générales sur le groupe
+	locations Locations // Lieux des concerts
+	dates Dates // Dates des concerts
+	// relations Relations
 }
 
+// Extrait et retourne les données en bytes de l'url donné
 func ExtractRawData(url string) []byte {
-	resp, err := http.Get(url)
-	if err != nil {
+	resp, err := http.Get(url) // Récupère le contenu de l'url
+	if err != nil { // En cas d'erreur
 		fmt.Println("Error loading the API : ",url)
 		panic(err)
 	}
 
-	rawData, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
+	rawData, err := ioutil.ReadAll(resp.Body) // Récupère les données dans l'html
+	if err != nil { // En cas d'erreur
 		fmt.Println("Error reading the response body : ",url,"\n",resp)
 		panic(err)
 	}
 
-	return rawData
+	return rawData // Retourne les données en bytes
 }
 
+// Récupère les données de l'api et les stockent dans une structure datasJson sous forme de json
 func InitializeData() datasJson {
 	var apiData datasJson
+	fmt.Println(apiData.artists)
+	// Récupère les données en tableau de bytes et les formata en Json
 	json.Unmarshal(ExtractRawData(apiUrls[0]), &apiData.artists)
 	json.Unmarshal(ExtractRawData(apiUrls[1]), &apiData.locations)
 	json.Unmarshal(ExtractRawData(apiUrls[2]), &apiData.dates)
@@ -43,13 +53,14 @@ func InitializeData() datasJson {
 	return apiData
 }
 
+// Récupère l'id d'un nom de groupe donné
 func GetId(artistsData Artists, name string) int {
 	for _, i := range artistsData {
 		if i.Name == name {
 			return i.ID
 		}
 	}
-	return -1
+	return -1 // Si aucun groupe avec ce nom n'a été trouvé
 }
 
 func GetDataById(artistsData Artists, id int) []string {
