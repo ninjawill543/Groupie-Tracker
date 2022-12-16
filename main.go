@@ -17,7 +17,7 @@ type datasJson struct {
 	Artists api.Artists // Informations générales sur le groupe
 	Locations api.Locations // Lieux des concerts
 	Dates api.Dates // Dates des concerts
-	// relations Relations
+	relations string
 }
 
 var t datasJson
@@ -25,6 +25,13 @@ var t datasJson
 func main() {
 	data := InitializeData()
 	t = data
+
+	concertsData := api.GetConcerts(data.relations)
+	for _, i := range concertsData {
+		for _, k := range i {
+			fmt.Println(k)
+		}
+	}
 
 	fs := http.FileServer(http.Dir("./static/assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
@@ -71,7 +78,7 @@ func InitializeData() datasJson {
 	json.Unmarshal(api.ExtractRawData(0), &apiData.Artists)
 	json.Unmarshal(api.ExtractRawData(1), &apiData.Locations)
 	json.Unmarshal(api.ExtractRawData(2), &apiData.Dates)
-	// json.Unmarshal(ExtractRawData(apiUrls[3]), &apiData.relations)
+	apiData.relations = string(api.ExtractRawData(3))
 
 	return apiData
 }
