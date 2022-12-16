@@ -1,5 +1,10 @@
+/*
+Contient les structures json utilisées par l'api donné
+*/
+
 package apiFunctions
 
+// Contient les informations générales des artistes/ groupe du lien : https://groupietrackers.herokuapp.com/api/artists
 type Artists []struct {	
 	ID           int      `json:"id"`
 	Image        string   `json:"image"`
@@ -12,6 +17,7 @@ type Artists []struct {
 	Relations    string   `json:"relations"`
 }
 
+// Contient les lieux des concerts du lien : https://groupietrackers.herokuapp.com/api/locations
 type Locations struct {
 	Index []struct {
 		ID        int      `json:"id"`
@@ -20,6 +26,7 @@ type Locations struct {
 	} `json:"index"`
 }
 
+// Contient les dates des concerts du lien : https://groupietrackers.herokuapp.com/api/dates
 type Dates struct {
 	Index []struct {
 		ID    int      `json:"id"`
@@ -27,6 +34,7 @@ type Dates struct {
 	} `json:"index"`
 }
 
+// Contient les relations entre lieux et dates de concerts du lien : https://groupietrackers.herokuapp.com/api/relation
 type Relations struct {
 	Index []struct {
 		ID             int `json:"id"`
