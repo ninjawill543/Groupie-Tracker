@@ -6,7 +6,7 @@ package main
 
 import (
 	"net/http"
-	// "html/template"
+	"html/template"
 	"fmt"
 	api "apiFunctions/api"
 	"encoding/json"
@@ -20,9 +20,11 @@ type datasJson struct {
 	// relations Relations
 }
 
+var t datasJson
+
 func main() {
 	data := InitializeData()
-	fmt.Println(data.artists)
+	t = data
 
 	fs := http.FileServer(http.Dir("./static/assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
@@ -32,7 +34,7 @@ func main() {
 
 func Handler(w http.ResponseWriter, r *http.Request) {
 
-	// tmpl := template.Must(template.ParseFiles("./static/index.html")) // Affiche la page
+	tmpl := template.Must(template.ParseFiles("./static/index.html")) // Affiche la page
 
 	// Affiche dans le terminal l'activité sur le site
 	switch r.Method {
@@ -44,21 +46,27 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	/*
-	// variable := r.Form.Get("input") // Récupère la saisie du joueur
+	variable := r.Form.Get("input") // Récupère la saisie du joueur
 
-	// Transmet au code html les variables nécessaires
-	
-	data := Data{
+	if variable == "test" {
+		fmt.Println("test")
 	}
 
+	data := datasJson{
+		artists: t.artists,
+		locations: t.locations,
+		dates: t.dates,
+	}
+
+	// Transmet au code html les variables nécessaires
+	fmt.Println(data.artists)
+
 	tmpl.Execute(w, data) // Execute le code html en fonction des changements de variables
-	*/
 }
 
 // Récupère les données de l'api et les stockent dans une structure datasJson sous forme de json
 func InitializeData() datasJson {
-	var apiData api.datasJson
+	var apiData datasJson
 	// Récupère les données en tableau de bytes et les formata en Json
 	json.Unmarshal(api.ExtractRawData(0), &apiData.artists)
 	json.Unmarshal(api.ExtractRawData(1), &apiData.locations)

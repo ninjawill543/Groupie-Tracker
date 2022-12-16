@@ -31,22 +31,25 @@
         <!-- Affichage des cards -->
         <div class="cards">
             <!-- Récupération de la card -->
+            {{ .artists }}
+            <!-- {{ range $key, $value := .test }}
             <div class="card">
                 <img src="./assets/img/queen.jpeg" alt="queen">
                 <div class="info-card">
-                    <h4></h4>
-                    <p></p>
-                        <a class="button" href="#popup{{i}}">Show</a>
+                    <h4>{{ $value }}</h4>
+                    <p>{{ $value }}</p>
+                        <a class="button" href="#popup{{ $key }}">Show</a>
                 </div>
-                <div id="popup{{i}}" class="overlay">
+                <div id="popup{{ $key }}" class="overlay">
                     <div class="popup">
-                        <h2>Information {{i}}</h2>
+                        <h2>Information {{ $key }}</h2>
                         <a class="close" href="#">&times;</a>
                         <div class="content">
                         </div>
                     </div>
                  </div>
             </div>
+            {{ end }} -->
             <div class="card">
                 <img src="./assets/img/queen.jpeg" alt="queen">
                 <div class="info-card">

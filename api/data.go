@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"io/ioutil"
 	// "encoding/json"
-	"strconv"
 )
 
 // Contient les urls de l'api
