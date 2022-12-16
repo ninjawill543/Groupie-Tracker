@@ -15,9 +15,8 @@ type datasJson struct {
 }
 
 func main() {
-	// data := InitializeData()
-
-
+	data := InitializeData()
+	fmt.Println(api.FilterOverCreationDate(data.Artists, 1, 1990))
 }
 
 // Récupère les données de l'api et les stockent dans une structure datasJson sous forme de json
