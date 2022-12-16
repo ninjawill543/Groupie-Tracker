@@ -13,7 +13,6 @@ import (
 
 // Variables envoyées au code html
 type Data struct {
-
 }
 
 func main() {
