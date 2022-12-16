@@ -1,5 +1,5 @@
 /*
-Contient les structures json utilisées par l'api donné
+Contient les structures json utilisées par l'api donné : https://groupietrackers.herokuapp.com/api
 */
 
 package apiFunctions

@@ -1,5 +1,5 @@
 /*
-Interargit avec l'api donné : https://groupietrackers.herokuapp.com/api/
+Interargit avec l'api donné : https://groupietrackers.herokuapp.com/api
 */
 
 package apiFunctions
@@ -66,6 +66,7 @@ func GetDataById(artistsData Artists, id int) []string {
 
 	return groupData
 }
+*/
 
 func GetConcertsById(locationData Locations, dateData Dates, id int) []string {
 	var concertsData []string
@@ -74,20 +75,24 @@ func GetConcertsById(locationData Locations, dateData Dates, id int) []string {
 			for _, k := range i.Locations {
 				concertsData = append(concertsData, k)
 				concertsData = append(concertsData, " ")
-				concertsData = append(concertsData, "§")
 			}
 		}
 	}
-	index := 1;
 	for _, i := range dateData.Index {
 		if id == i.ID {
 			for _, k := range i.Dates {
-				concertsData[index] = k
-				index += 3
+				concertsData = append(concertsData, k)
 			}
 		}
 	}
 
 	return concertsData
 }
-*/
+
+func GetAllConcerts(artistsdata Artists, locationData Locations, dateData Dates) [][]string {
+	var concertsData [][]string
+	for _, i := range artistsdata {
+		concertsData = append(concertsData, GetConcertsById(locationData, dateData, i.ID))
+	}
+	return concertsData
+}
