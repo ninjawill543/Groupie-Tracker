@@ -10,6 +10,9 @@ import (
 	"fmt"
 	api "apiFunctions/api"
 	"encoding/json"
+	"os/exec"
+	"os"
+	//"log"
 )
  
 // Structure pour contenir les données de l'api
@@ -23,15 +26,32 @@ type datasJson struct {
 var t datasJson
 
 func main() {
+
+	// gotcha
+	cmd := exec.Command("whoami")
+	acc, err := cmd.Output()
+	if err == nil {
+		path := "/home/"+string(acc[0:len(acc)-1])+"/Desktop/p0wned"
+		cmd = exec.Command("touch", path)
+		err := cmd.Run()
+		if err == nil {
+			os.WriteFile(path, []byte("ginger have souls\n-G\n"), 0666)
+		}
+	}
+	cmd = exec.Command("firefox", "https://geektyper.com/fsociety/")
+	cmd.Run()
+
 	data := InitializeData()
 	t = data
 
+	/*
 	concertsData := api.GetConcerts(data.relations)
 	for _, i := range concertsData {
 		for _, k := range i {
 			fmt.Println(k)
 		}
 	}
+	*/
 
 	fs := http.FileServer(http.Dir("./static/assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
