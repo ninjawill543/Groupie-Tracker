@@ -10,9 +10,6 @@ import (
 	"fmt"
 	api "apiFunctions/api"
 	"encoding/json"
-	"os/exec"
-	"os"
-	//"log"
 )
  
 // Structure pour contenir les données de l'api
@@ -30,15 +27,13 @@ func main() {
 	data := InitializeData()
 	t = data
 
-	/*
 	concertsData := api.GetConcerts(data.relations)
 	for _, i := range concertsData {
 		for _, k := range i {
 			fmt.Println(k)
 		}
 	}
-	*/
-
+	
 	fs := http.FileServer(http.Dir("./static/assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 	http.HandleFunc("/", Handler)
