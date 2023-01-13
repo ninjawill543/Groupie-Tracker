@@ -100,8 +100,10 @@ select::-ms-expand {
 /* Cards */
 
 .cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 
 .cards div img {
