@@ -49,33 +49,9 @@ func GetConcerts(relations string) [][]string {
 			start = i1+1
 			inside = 1
 		}
-<<<<<<< HEAD
-	}
-
-	return groupData
-}
-*/
-
-func GetConcertsById(locationData Locations, dateData Dates, id int) []string {
-	var concertsData []string
-	for _, i := range locationData.Index {
-		if id == i.ID {
-			for _, k := range i.Locations {
-				concertsData = append(concertsData, k)
-				concertsData = append(concertsData, " ")
-			}
-		}
-	}
-	for _, i := range dateData.Index {
-		if id == i.ID {
-			for _, k := range i.Dates {
-				concertsData = append(concertsData, k)
-			}
-=======
 		if (i2 == '}') && (inside == 1) {
 			concertsData = append(concertsData, FormatConcertString(relations[start: i1+1]))	
 			inside = 0
->>>>>>> master
 		}
 	}
 
