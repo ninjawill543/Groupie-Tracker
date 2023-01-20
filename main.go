@@ -23,7 +23,6 @@ type datasJson struct {
 var t datasJson
 
 func main() {
-
 	data := InitializeData()
 	t = data
 
