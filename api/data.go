@@ -105,6 +105,17 @@ func FormatConcertString(s string) []string {
 	return formated
 }
 
+func Search(input string, artistsData Artists) int {
+	id := -1
+	for _, i := range artistsData {
+		if i.Name == input {
+			id = i.ID
+		}
+	}
+
+	return id
+}
+
 func FilterCreationDate(artistsData Artists, mode int, date int) []int {
 	var idOverDate []int
 	for _, i := range artistsData {
