@@ -37,7 +37,6 @@
                 <img src={{ $v.Image}} alt={{ $v.Name}}>
                 <div class="info-card">
                     <h4>{{ $v.Name}}</h4>
-                    <p>Membres:</p>
                     {{ range $v.Members }}
                     <p>{{ . }}</p>
                     {{ end }}
@@ -56,6 +55,9 @@
                                 <p>Date de création: {{ $v.CreationDate}}</p>
                                 <p>Première album: {{ $v.FirstAlbum}}</p>
                                 <h2>Concert:</h2>
+                                {{ range $data.Relations }}
+                                    <p>{{ . }}</p>
+                                {{ end }}
                             </div>
                             <div>
                                 <img src={{ $v.Image}} alt={{ $v.Name}}>
