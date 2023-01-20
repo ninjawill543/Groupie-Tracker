@@ -58,14 +58,6 @@ func GetConcerts(relations string) [][]string {
 	return concertsData
 }
 
-<<<<<<< HEAD
-func GetAllConcerts(artistsdata Artists, locationData Locations, dateData Dates) [][]string {
-	var concertsData [][]string
-	for _, i := range artistsdata {
-		concertsData = append(concertsData, GetConcertsById(locationData, dateData, i.ID))
-	}
-	return concertsData
-=======
 func FormatConcertString(s string) []string {
 	var formated []string
 	var index, start, iteration, length int = 0, -1, 0, 0
@@ -123,5 +115,4 @@ func FilterCreationDate(artistsData Artists, mode int, date int) []int {
 	}
 
 	return idOverDate
->>>>>>> master
 }
