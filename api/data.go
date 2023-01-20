@@ -27,7 +27,7 @@ func ExtractRawData(urlIndex int) []byte {
 		fmt.Println("Error reading the response body : ", apiUrls[urlIndex], "\n", resp)
 		panic(err)
 	}
-
+	
 	return rawData // Retourne les données en bytes
 }
 
@@ -106,14 +106,66 @@ func FormatConcertString(s string) []string {
 }
 
 func Search(input string, artistsData Artists) int {
+	input = Minimalize(input)
+	var similarities []int
 	id := -1
 	for _, i := range artistsData {
-		if i.Name == input {
+		name := Minimalize(i.Name)
+		if input == Minimalize(name) {
 			id = i.ID
+		}
+		similarities = append(similarities, CheckSimilarities(input, name))
+	}
+
+	max := 0
+	maxId := -1
+	var maxSimilarities []int
+	for len(maxSimilarities) < 5 {
+		for i1, i2 := range similarities {
+			if i2 > max {
+				for _, k := range maxSimilarities {
+					if i1 == k {
+						break
+					} else if i1 == len(maxSimilarities) {
+						max = i2
+						maxId = i1
+					}
+				}
+			}
+		}
+		maxSimilarities = append(maxSimilarities, maxId)
+	}
+
+	fmt.Println(maxSimilarities)
+
+	return id
+}
+
+func Minimalize(s string) string {
+	var solu string
+	for i, _ := range s {
+		if (s[i] >= 'A') && (s[i] <= 'Z') {
+			solu += string(s[i]+('a'-'A'))
+		} else {
+			solu += string(s[i])
 		}
 	}
 
-	return id
+	return solu
+}
+
+func CheckSimilarities(s1 string, s2 string) int {
+	similarities := 0
+	for _, k := range s1 {
+		for _, j := range s2 {
+			if k == j {
+				similarities ++
+				break
+			}
+		}
+	}
+
+	return similarities
 }
 
 func FilterCreationDate(artistsData Artists, mode int, date int) []int {
