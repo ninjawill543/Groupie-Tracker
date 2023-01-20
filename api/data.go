@@ -41,7 +41,7 @@ func GetId(artistsData Artists, name string) int {
 	return -1 // Si aucun groupe avec ce nom n'a été trouvé
 }
 
-func GetConcerts(relations string) [][]string {
+func GetConcerts(relations string) []string {
 	var concertsData [][]string
 	var start, inside int
 	for i1, i2 := range relations {
@@ -55,7 +55,16 @@ func GetConcerts(relations string) [][]string {
 		}
 	}
 
-	return concertsData
+	var data []string
+	index := 0
+	for _, i := range concertsData {
+		for _, k := range i {
+			data = append(data, "")
+			data[index] += k+"\n"
+		}
+	}
+
+	return data
 }
 
 func FormatConcertString(s string) []string {

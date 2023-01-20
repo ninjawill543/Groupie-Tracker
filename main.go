@@ -28,9 +28,7 @@ func main() {
 
 	concertsData := api.GetConcerts(data.relations)
 	for _, i := range concertsData {
-		for _, k := range i {
-			fmt.Println(k)
-		}
+		fmt.Println(i)
 	}
 	
 	fs := http.FileServer(http.Dir("./static/assets"))
