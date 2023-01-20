@@ -51,12 +51,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("test")
 	}
 
-	data := datasJson{
-		Artists: groupData.Artists,
-		Relations: groupData.Relations,
-	}
-
-	tmpl.Execute(w, data) // Execute le code html en fonction des changements de variables
+	tmpl.Execute(w, groupData) // Execute le code html en fonction des changements de variables
 }
 
 // Récupère les données de l'api et les stockent dans une structure datasJson sous forme de json

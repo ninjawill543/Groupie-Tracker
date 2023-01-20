@@ -31,34 +31,40 @@
         <!-- Affichage des cards -->
         <div class="cards">
             <!-- Récupération de la card -->
-            {{ range $key, $value := .Artists }}
+            {{$data := .}}
+            {{ range $k, $v := .Artists }}
             <div class="card">
-                <img src={{ $value.Image }} alt={{ $value.Name }}>
+                <img src={{ $v.Image}} alt={{ $v.Name}}>
                 <div class="info-card">
-                    <h4>{{ $value.Name }}</h4>
-                    <p>{{ $value.Members }}</p>
-                        <a class="button" href="#popup{{ $key }}">Show</a>
+                    <h4>{{ $v.Name}}</h4>
+                    <p>Membres:</p>
+                    {{ range $v.Members }}
+                    <p>{{ . }}</p>
+                    {{ end }}
+                    <a class="button" href="#popup{{ $k }}">Show</a>
                 </div>
-                <div id="popup{{ $key }}" class="overlay">
+                <div id="popup{{ $k }}" class="overlay">
                     <div class="popup">
                         <a class="close" href="#">&times;</a>
                         <div class="content">
                             <div>
-                                <h2>Nom: {{ $value.Name }}</h2>
-                                <p>Membres: {{ $value.Members }}</p>
-                                <p>Date de création: {{ $value.CreationDate }}</p>
-                                <p>Première album: {{ $value.FirstAlbum }}</p>
+                                <h2>Nom: {{ $v.Name}}</h2>
+                                <p>Membres:</p>
+                                {{ range $v.Members }}
+                                <p>{{ . }}</p>
+                                {{ end }}
+                                <p>Date de création: {{ $v.CreationDate}}</p>
+                                <p>Première album: {{ $v.FirstAlbum}}</p>
                                 <h2>Concert:</h2>
-                                <p>{{index .Relations 0}}</p>
                             </div>
                             <div>
-                                <img src={{ $value.Image }} alt={{ $value.Name }}>
+                                <img src={{ $v.Image}} alt={{ $v.Name}}>
                             </div>
                         </div>
                     </div>
                  </div>
             </div>
-            {{ end }}
+            {{end}}
         </div>
     </main>
     <footer>
