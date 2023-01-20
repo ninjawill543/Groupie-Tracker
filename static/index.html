@@ -11,6 +11,25 @@
 <body>
     <!-- Titre de la page -->
     <h1>API Groupie Tracker</h1>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <form action="/" method="POST">
+            <div>
+                <label for="date-min" style="color: aliceblue;">Date (min):</label>
+                <input type="range" name="date-min" id="date-min" min="1900" max="2022">
+            </div>
+            <div>
+                <label for="date-max" style="color: aliceblue;">Date (max):</label>
+                <input type="range" name="date-max" id="date-max" min="1900" max="2022">
+            </div>
+            <input type="submit" value="Filtrer">
+        </form>
+      </div>
+      
+      <span style="font-size:30px;cursor:pointer; position: absolute;top: 25px;right: 25px;" onclick="openNav()">&#9776; Filter by</span>
+      
+      <script src="./assets/index.js"></script>
+
     <main>
         <!-- Division de recherche -->
         <div class="search-div">
@@ -18,14 +37,6 @@
             <form action="/" method="POST">
                 <!-- Bouton de recherche -->
                 <input type="search" name="search" id="search" placeholder="Search" autofocus>
-                <!-- Bouton de sélection du type de recherche -->
-                <div id="select">
-                    <select name="select">
-                        <option value="artists" selected>Artists</option>
-                        <option value="date">Date</option>
-                        <option value="location">Location</option>
-                    </select>
-                </div>
             </form>
         </div>
         <!-- Affichage des cards -->
@@ -47,20 +58,20 @@
                         <a class="close" href="#">&times;</a>
                         <div class="content">
                             <div>
-                                <h2>Nom: {{ $v.Name}}</h2>
+                                <h2>{{ $v.Name}}</h2>
                                 <p>Membres:</p>
+                                <p>
                                 {{ range $v.Members }}
-                                <p>{{ . }}</p>
+                                    {{ . }},
                                 {{ end }}
+                                </p>
                                 <p>Date de création: {{ $v.CreationDate}}</p>
                                 <p>Première album: {{ $v.FirstAlbum}}</p>
                                 <h2>Concert:</h2>
-                                {{ range $data.Relations }}
-                                    <p>{{ . }}</p>
-                                {{ end }}
+                                <p>{{(index $data.Relations $k)}} </p>
                             </div>
                             <div>
-                                <img src={{ $v.Image}} alt={{ $v.Name}}>
+                                <iframe width='600px' height='600px' src="https://api.mapbox.com/styles/v1/ninjawill543/cld4bwm4c000h01tbd9cr3hun/static/pin-l-music+dd380f(-79.3896838690365,35.5568849207634),pin-l-music+dd380f(-83.2572560296474,32.3305706594431),pin-l-music+dd380f(-118.242766,34.053691),pin-l-music+dd380f(139.645796,35.86164),pin-l-music+dd380f(135.501454,34.693757),pin-l-music+dd380f(136.899844,35.185105),pin-l-music+dd380f(174.8148,-36.9111),pin-l-music+dd380f(170.503575,-45.874098)/20,0,0/600x600?access_token=pk.eyJ1IjoibmluamF3aWxsNTQzIiwiYSI6ImNsZDRidWdrNjBvbDczcW9jajU5c3UxdXAifQ._jM-ztlL3-V9_0WjlFB01A" title="Outdoors" style="border:none;"></iframe>
                             </div>
                         </div>
                     </div>
