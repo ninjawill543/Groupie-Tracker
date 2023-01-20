@@ -100,9 +100,10 @@ select::-ms-expand {
 /* Cards */
 
 .cards {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 
 .cards div img {
@@ -111,6 +112,10 @@ select::-ms-expand {
 
 .card:hover > img {
     display: none;
+}
+
+.card {
+  margin: 20px;
 }
 
 .card:hover > .info-card {
@@ -147,6 +152,7 @@ select::-ms-expand {
     background-color: var(--red);
     text-decoration: none;
 }
+
 .button:hover {
     cursor: pointer;
 }
@@ -162,6 +168,7 @@ select::-ms-expand {
   visibility: hidden;
   opacity: 0;
 }
+
 .overlay:target {
   visibility: visible;
   opacity: 1;
@@ -181,11 +188,12 @@ select::-ms-expand {
 .popup h2 {
   margin-top: 0;
   padding: 0 0 20px 0;
-  color: #333;
 }
+
 .popup p {
     margin: 20px 0;
 }
+
 .popup .close {
   position: absolute;
   top: 20px;
@@ -196,13 +204,29 @@ select::-ms-expand {
   text-decoration: none;
   color: #333;
 }
+
 .popup .close:hover {
   color: var(--red);
 }
-.popup .content {
-  max-height: 30%;
-  overflow: auto;
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100%;
 }
+
+.content div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.content img {
+  height: 55%;
+  width: 50%;
+}
+
     
 @media screen and (max-width: 700px){
   .box{
@@ -216,8 +240,6 @@ select::-ms-expand {
 /* Footer */
 
 footer {
-    position: absolute;
-    bottom: 0;
     display: flex;
     justify-content: center;
     align-items: center;

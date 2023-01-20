@@ -32,6 +32,7 @@ type Dates struct {
 		ID    int      `json:"id"`
 		Dates []string `json:"dates"`
 	} `json:"index"`
+<<<<<<< HEAD
 }
 
 // Contient les relations entre lieux et dates de concerts du lien : https://groupietrackers.herokuapp.com/api/relation
@@ -476,4 +477,6 @@ type Relations struct {
 			VancouverCanada []string `json:"vancouver-canada"`
 		} `json:"datesLocations,omitempty"`
 	} `json:"index"`
+=======
+>>>>>>> master
 }

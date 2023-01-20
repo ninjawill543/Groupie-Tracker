@@ -14,10 +14,10 @@ import (
  
 // Structure pour contenir les données de l'api
 type datasJson struct {
-	artists api.Artists // Informations générales sur le groupe
-	locations api.Locations // Lieux des concerts
-	dates api.Dates // Dates des concerts
-	// relations Relations
+	Artists api.Artists // Informations générales sur le groupe
+	Locations api.Locations // Lieux des concerts
+	Dates api.Dates // Dates des concerts
+	relations string
 }
 
 var t datasJson
@@ -26,6 +26,13 @@ func main() {
 	data := InitializeData()
 	t = data
 
+	concertsData := api.GetConcerts(data.relations)
+	for _, i := range concertsData {
+		for _, k := range i {
+			fmt.Println(k)
+		}
+	}
+	
 	fs := http.FileServer(http.Dir("./static/assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 	http.HandleFunc("/", Handler)
@@ -53,13 +60,13 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := datasJson{
-		artists: t.artists,
-		locations: t.locations,
-		dates: t.dates,
+		Artists: t.Artists,
+		Locations: t.Locations,
+		Dates: t.Dates,
 	}
 
 	// Transmet au code html les variables nécessaires
-	fmt.Println(data.artists)
+	fmt.Println(data.Artists)
 
 	tmpl.Execute(w, data) // Execute le code html en fonction des changements de variables
 }
@@ -68,10 +75,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 func InitializeData() datasJson {
 	var apiData datasJson
 	// Récupère les données en tableau de bytes et les formata en Json
-	json.Unmarshal(api.ExtractRawData(0), &apiData.artists)
-	json.Unmarshal(api.ExtractRawData(1), &apiData.locations)
-	json.Unmarshal(api.ExtractRawData(2), &apiData.dates)
-	// json.Unmarshal(ExtractRawData(apiUrls[3]), &apiData.relations)
+	json.Unmarshal(api.ExtractRawData(0), &apiData.Artists)
+	json.Unmarshal(api.ExtractRawData(1), &apiData.Locations)
+	json.Unmarshal(api.ExtractRawData(2), &apiData.Dates)
+	apiData.relations = string(api.ExtractRawData(3))
 
 	return apiData
 }

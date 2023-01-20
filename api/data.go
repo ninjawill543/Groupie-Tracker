@@ -41,27 +41,15 @@ func GetId(artistsData Artists, name string) int {
 	return -1 // Si aucun groupe avec ce nom n'a été trouvé
 }
 
-/* Inutile ?
-func GetDataById(artistsData Artists, id int) []string {
-	var groupData []string
-	for _, i := range artistsData {
-		if (id == i.ID) {
-			groupData = append(groupData, strconv.Itoa(i.ID))
-			groupData = append(groupData, "§")
-			groupData = append(groupData, i.Image)
-			groupData = append(groupData, "§")
-			groupData = append(groupData, i.Name)
-			groupData = append(groupData, "§")
-			for _, k := range i.Members {
-				groupData = append(groupData, k)
-			}
-			groupData = append(groupData, "§")
-			groupData = append(groupData, strconv.Itoa(i.CreationDate))
-			groupData = append(groupData, "§")
-			groupData = append(groupData, i.FirstAlbum)
-			groupData = append(groupData, "§")
-			break
+func GetConcerts(relations string) [][]string {
+	var concertsData [][]string
+	var start, inside int
+	for i1, i2 := range relations {
+		if i2 == '{' {
+			start = i1+1
+			inside = 1
 		}
+<<<<<<< HEAD
 	}
 
 	return groupData
@@ -83,16 +71,81 @@ func GetConcertsById(locationData Locations, dateData Dates, id int) []string {
 			for _, k := range i.Dates {
 				concertsData = append(concertsData, k)
 			}
+=======
+		if (i2 == '}') && (inside == 1) {
+			concertsData = append(concertsData, FormatConcertString(relations[start: i1+1]))	
+			inside = 0
+>>>>>>> master
 		}
 	}
 
 	return concertsData
 }
 
+<<<<<<< HEAD
 func GetAllConcerts(artistsdata Artists, locationData Locations, dateData Dates) [][]string {
 	var concertsData [][]string
 	for _, i := range artistsdata {
 		concertsData = append(concertsData, GetConcertsById(locationData, dateData, i.ID))
 	}
 	return concertsData
+=======
+func FormatConcertString(s string) []string {
+	var formated []string
+	var index, start, iteration, length int = 0, -1, 0, 0
+	for i1, i2 := range s {
+		if (i2 == ']') && (iteration != 0) {
+			index++
+			iteration = 0
+		}
+		if string(i2) == "\"" {
+			if start == -1 {
+				start = i1+1
+			} else {
+				switch iteration {
+				case 0:
+					formated = append(formated, s[start: i1])
+					length = len(formated[index])+4
+				case 1:
+					for i := 0; i < 4; i++ {
+						formated[index] += " "
+					}
+					formated[index] += s[start: i1]
+				default:
+					formated[index] = formated[index]+"\n"
+					for i := 0; i < length; i++ {
+						formated[index] += " "
+					}
+					formated[index] += s[start: i1]
+				}
+				start = -1
+				iteration++
+			}
+		}
+	}
+
+	return formated
+}
+
+func FilterCreationDate(artistsData Artists, mode int, date int) []int {
+	var idOverDate []int
+	for _, i := range artistsData {
+		switch mode {
+		case 0:
+			if i.CreationDate == date {
+				idOverDate = append(idOverDate, i.ID)
+			}
+		case 1:
+			if i.CreationDate < date {
+				idOverDate = append(idOverDate, i.ID)
+			}
+		case 2:
+			if i.CreationDate > date {
+				idOverDate = append(idOverDate, i.ID)
+			}
+		}
+	}
+
+	return idOverDate
+>>>>>>> master
 }
