@@ -11,22 +11,21 @@ import (
 	api "apiFunctions/api"
 	"encoding/json"
 )
- 
+	
 // Structure pour contenir les données de l'api
 type datasJson struct {
 	Artists api.Artists // Informations générales sur le groupe
 	Locations api.Locations // Lieux des concerts
 	Dates api.Dates // Dates des concerts
-	relations []string
+	Relations []string
 }
 
-var t datasJson
+var data datasJson
 
 func main() {
 	data := InitializeData()
-	t = data
 
-	fmt.Println(t.relations[0])
+	fmt.Println(data.Relations[0])
 	
 	fs := http.FileServer(http.Dir("./static/assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
@@ -55,9 +54,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := datasJson{
-		Artists: t.Artists,
-		Locations: t.Locations,
-		Dates: t.Dates,
+		Artists: data.Artists,
+		Relations: data.Relations,
 	}
 
 	// Transmet au code html les variables nécessaires
@@ -73,7 +71,7 @@ func InitializeData() datasJson {
 	json.Unmarshal(api.ExtractRawData(0), &apiData.Artists)
 	json.Unmarshal(api.ExtractRawData(1), &apiData.Locations)
 	json.Unmarshal(api.ExtractRawData(2), &apiData.Dates)
-	apiData.relations = api.GetConcerts(string(api.ExtractRawData(3)))
+	apiData.Relations = api.GetConcerts(string(api.ExtractRawData(3)))
 
 	return apiData
 }

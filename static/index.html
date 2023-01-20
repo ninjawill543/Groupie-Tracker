@@ -49,6 +49,7 @@
                                 <p>Date de création: {{ $value.CreationDate }}</p>
                                 <p>Première album: {{ $value.FirstAlbum }}</p>
                                 <h2>Concert:</h2>
+                                <p>{{index .Relations 0}}</p>
                             </div>
                             <div>
                                 <img src={{ $value.Image }} alt={{ $value.Name }}>
