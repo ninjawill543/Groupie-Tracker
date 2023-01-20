@@ -20,12 +20,10 @@ type datasJson struct {
 	Relations []string
 }
 
-var data datasJson
+var groupData datasJson
 
 func main() {
-	data := InitializeData()
-
-	fmt.Println(data.Relations[0])
+	groupData = InitializeData()
 	
 	fs := http.FileServer(http.Dir("./static/assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
@@ -54,12 +52,9 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := datasJson{
-		Artists: data.Artists,
-		Relations: data.Relations,
+		Artists: groupData.Artists,
+		Relations: groupData.Relations,
 	}
-
-	// Transmet au code html les variables nécessaires
-	fmt.Println(data.Artists)
 
 	tmpl.Execute(w, data) // Execute le code html en fonction des changements de variables
 }
