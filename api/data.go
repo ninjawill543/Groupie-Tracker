@@ -62,6 +62,7 @@ func GetConcerts(relations string) []string {
 			data = append(data, "")
 			data[index] += k+"\n"
 		}
+		index++
 	}
 
 	return data
