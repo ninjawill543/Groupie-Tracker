@@ -105,7 +105,7 @@ func FormatConcertString(s string) []string {
 	return formated
 }
 
-func Search(input string, artistsData Artists) int {
+func Search(input string, artistsData Artists) (int, [5]int) {
 	input = Minimalize(input)
 	var similarities []int
 	id := -1
@@ -117,28 +117,34 @@ func Search(input string, artistsData Artists) int {
 		similarities = append(similarities, CheckSimilarities(input, name))
 	}
 
+	fmt.Println(similarities)
+
 	max := 0
-	maxId := -1
-	var maxSimilarities []int
-	for len(maxSimilarities) < 5 {
+	maxId := 0
+	var maxSimilarities [5]int
+	for i := range maxSimilarities {
+		maxSimilarities[i] = -1
+	}
+	index := 0
+	for index < 5 {
 		for i1, i2 := range similarities {
 			if i2 > max {
-				for _, k := range maxSimilarities {
-					if i1 == k {
+				for k1, k2 := range maxSimilarities {
+					if i1 == k2 {
 						break
-					} else if i1 == len(maxSimilarities) {
-						max = i2
+					} else if k1 == len(maxSimilarities)-1 {
 						maxId = i1
+						max = similarities[maxId]
 					}
 				}
 			}
 		}
-		maxSimilarities = append(maxSimilarities, maxId)
+		maxSimilarities[index] = maxId
+		index++
+		max = 0
 	}
 
-	fmt.Println(maxSimilarities)
-
-	return id
+	return id, maxSimilarities	
 }
 
 func Minimalize(s string) string {
@@ -167,6 +173,17 @@ func CheckSimilarities(s1 string, s2 string) int {
 
 	return similarities
 }
+
+func Minimum(s [5]int) int {
+	max := s[0]
+	for _, i := range s {
+		if i > max {
+			max = i
+		}
+	}
+
+	return max
+} 
 
 func FilterCreationDate(artistsData Artists, mode int, date int) []int {
 	var idOverDate []int

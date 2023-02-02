@@ -48,12 +48,18 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	input := r.Form.Get("search") // Récupère la saisie du joueur
 
 	if len(input) > 0 {
-		result := api.Search(input, groupData.Artists)
+		fmt.Println("Request : ", input)
+		result, similarities := api.Search(input, groupData.Artists)
 		if result > -1 {
 			fmt.Println(groupData.Artists[result-1].ID, groupData.Artists[result-1].Name)
 		} else {
-			fmt.Println("Nothing found")
+			fmt.Println("Not found")
 		}
+		fmt.Println("Maybe looking for :")
+		for _, i := range similarities {
+			fmt.Println(groupData.Artists[i].Name)
+		}
+		fmt.Println()
 	}
 
 	tmpl.Execute(w, groupData) // Execute le code html en fonction des changements de variables
