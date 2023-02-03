@@ -9,7 +9,6 @@ import (
 	"html/template"
 	"fmt"
 	api "apiFunctions/api"
-	map "apiFunctions/map"
 	"encoding/json"
 )
 	

@@ -1,4 +1,4 @@
-package map
+package apiFunctions
 
 import (
     "encoding/json"
