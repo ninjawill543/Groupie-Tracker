@@ -1,95 +1,78 @@
+/*
+Lance le serveur
+*/
+
 package main
 
 import (
+	"net/http"
+	"html/template"
 	"fmt"
-	"encoding/json"
 	api "apiFunctions/api"
-	//"strconv"
+	"encoding/json"
 )
-
+	
 // Structure pour contenir les données de l'api
 type datasJson struct {
-	artists api.Artists // Informations générales sur le groupe
-	locations api.Locations // Lieux des concerts
-	dates api.Dates // Dates des concerts
-	relations string
+	Artists api.Artists // Informations générales sur le groupe
+	Locations api.Locations // Lieux des concerts
+	Dates api.Dates // Dates des concerts
+	Relations []string
 }
 
-func main() {
-	data := InitializeData()
-	concertsData := GetConcerts(data.relations)
+var groupData datasJson
 
-	for _, i := range concertsData {
-		for _, k := range i {
-			fmt.Println(k)
+func main() {
+	groupData = InitializeData()
+	
+	fs := http.FileServer(http.Dir("./static/assets"))
+	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
+	http.HandleFunc("/", Handler)
+	http.ListenAndServe(":8080", nil)
+}
+
+func Handler(w http.ResponseWriter, r *http.Request) {
+
+	tmpl := template.Must(template.ParseFiles("./static/index.html")) // Affiche la page
+
+	// Affiche dans le terminal l'activité sur le site
+	switch r.Method {
+	case "GET":
+		fmt.Println("GET")
+	case "POST": // Gestion d'erreur
+		if err := r.ParseForm(); err != nil {
+			return
 		}
 	}
+
+	input := r.Form.Get("search") // Récupère la saisie du joueur
+
+	if len(input) > 0 {
+		fmt.Println("Request : ", input)
+		result, similarities := api.Search(input, groupData.Artists)
+		if result > -1 {
+			fmt.Println(groupData.Artists[result-1].ID, groupData.Artists[result-1].Name)
+		} else {
+			fmt.Println("Not found")
+		}
+		fmt.Println("Maybe looking for :")
+		for _, i := range similarities {
+			fmt.Println(groupData.Artists[i].Name)
+		}
+		fmt.Println()
+	}
+
+	tmpl.Execute(w, groupData) // Execute le code html en fonction des changements de variables
 }
 
 // Récupère les données de l'api et les stockent dans une structure datasJson sous forme de json
 func InitializeData() datasJson {
 	var apiData datasJson
 	// Récupère les données en tableau de bytes et les formata en Json
-	json.Unmarshal(api.ExtractRawData(0), &apiData.artists)
-	json.Unmarshal(api.ExtractRawData(1), &apiData.locations)
-	json.Unmarshal(api.ExtractRawData(2), &apiData.dates)
-	apiData.relations = string(api.ExtractRawData(3))
+	json.Unmarshal(api.ExtractRawData(0), &apiData.Artists)
+	json.Unmarshal(api.ExtractRawData(1), &apiData.Locations)
+	json.Unmarshal(api.ExtractRawData(2), &apiData.Dates)
+	apiData.Relations = api.GetConcerts(string(api.ExtractRawData(3)))
 
 	return apiData
-}
-
-func GetConcerts(relations string) [][]string {
-	fmt.Println(relations, "\n")
-
-	var concertsData [][]string
-	var start, inside int
-	for i1, i2 := range relations {
-		if i2 == '{' {
-			start = i1+1
-			inside = 1
-		}
-		if (i2 == '}') && (inside == 1) {
-			concertsData = append(concertsData, formatConcertString(relations[start: i1+1]))	
-			inside = 0
-		}
-	}
-
-	return concertsData
-}
-
-func formatConcertString(s string) []string {
-	var formated []string
-	var index, start, iteration, length int = 0, -1, 0, 0
-	for i1, i2 := range s {
-		if (i2 == ']') && (iteration != 0) {
-			index++
-			iteration = 0
-		}
-		if string(i2) == "\"" {
-			if start == -1 {
-				start = i1+1
-			} else {
-				switch iteration {
-				case 0:
-					formated = append(formated, s[start: i1])
-					length = len(formated[index])+4
-				case 1:
-					for i := 0; i < 4; i++ {
-						formated[index] += " "
-					}
-					formated[index] += s[start: i1]
-				default:
-					formated[index] = formated[index]+"\n"
-					for i := 0; i < length; i++ {
-						formated[index] += " "
-					}
-					formated[index] += s[start: i1]
-				}
-				start = -1
-				iteration++
-			}
-		}
-	}
-
-	return formated
 }

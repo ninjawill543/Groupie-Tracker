@@ -27,7 +27,7 @@ func ExtractRawData(urlIndex int) []byte {
 		fmt.Println("Error reading the response body : ", apiUrls[urlIndex], "\n", resp)
 		panic(err)
 	}
-
+	
 	return rawData // Retourne les données en bytes
 }
 
@@ -103,7 +103,7 @@ func FormatConcertString(s string) []string {
 	}
 
 	return formated
-}
+} 
 
 func FilterCreationDate(artistsData Artists, mode int, date int) []int {
 	var idOverDate []int
