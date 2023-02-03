@@ -47,8 +47,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	input := r.Form.Get("search") // Récupère la saisie du joueur
 
-	fmt.Println("input :", input)
-
 	if len(input) > 0 {
 		fmt.Println("Request : ", input)
 		result, similarities := api.Search(input, groupData.Artists)
