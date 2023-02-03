@@ -23,9 +23,6 @@ type datasJson struct {
 var groupData datasJson
 
 func main() {
-
-	
-
 	groupData = InitializeData()
 	
 	fs := http.FileServer(http.Dir("./static/assets"))
@@ -62,6 +59,16 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		for _, i := range similarities {
 			fmt.Println(groupData.Artists[i].Name)
 		}
+		fmt.Println()
+
+		var test api.Artists
+		if result > -1 {
+			test = append(test, groupData.Artists[result-1])
+		}
+		for _, i := range similarities {
+			test = append(test, groupData.Artists[i])
+		}
+		fmt.Println(test)
 		fmt.Println()
 	}
 
