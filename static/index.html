@@ -4,85 +4,91 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="./assets/img/favicon.jpeg" type="image/x-icon">
+    <link rel="shortcut icon" href="./assets/img/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="./assets/css/style.css">
-    <title>Groupie-tracker</title>
+    <title>Groupie Tracker</title>
 </head>
 <body>
-    <!-- Titre de la page -->
-    <h1>API Groupie Tracker</h1>
-    <div id="mySidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <form action="/" method="POST">
-            <div>
-                <label for="date-min" style="color: aliceblue;">Date (min):</label>
-                <input type="range" name="date-min" id="date-min" min="1900" max="2022">
-            </div>
-            <div>
-                <label for="date-max" style="color: aliceblue;">Date (max):</label>
-                <input type="range" name="date-max" id="date-max" min="1900" max="2022">
-            </div>
-            <input type="submit" value="Filtrer">
-        </form>
-      </div>
-      
-      <span style="font-size:30px;cursor:pointer; position: absolute;top: 25px;right: 25px;" onclick="openNav()">&#9776; Filter by</span>
-      
-      <script src="./assets/index.js"></script>
+    <div id="dots-flow">
 
-    <main>
-        <!-- Division de recherche -->
-        <div class="search-div">
-            <!-- Formulaire de recherche -->
+    </div>
+    <section id="loading">
+        <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             <form action="/" method="POST">
-                <!-- Bouton de recherche -->
-                <input type="search" name="search" id="search" placeholder="Search" autofocus>
-            </form>
-        </div>
-        <!-- Affichage des cards -->
-        <div class="cards">
-            <!-- Récupération de la card -->
-            {{$data := .}}
-            {{ range $k, $v := .Artists }}
-            <div class="card">
-                <img src={{ $v.Image}} alt={{ $v.Name}}>
-                <div class="info-card">
-                    <h4>{{ $v.Name}}</h4>
-                    {{ range $v.Members }}
-                    <p>{{ . }}</p>
-                    {{ end }}
-                    <a class="button" href="#popup{{ $k }}">Show</a>
+                <div>
+                    <label for="date-min" style="color: aliceblue;">Date (min):</label>
+                    <input type="range" name="date-min" id="date-min" min="1900" max="2022" value="2022">
                 </div>
-                <div id="popup{{ $k }}" class="overlay">
-                    <div class="popup">
-                        <a class="close" href="#">&times;</a>
-                        <div class="content">
-                            <div>
-                                <h2>{{ $v.Name}}</h2>
-                                <p>Membres:</p>
-                                <p>
-                                {{ range $v.Members }}
-                                    {{ . }},
-                                {{ end }}
-                                </p>
-                                <p>Date de création: {{ $v.CreationDate}}</p>
-                                <p>Première album: {{ $v.FirstAlbum}}</p>
-                                <h2>Concert:</h2>
-                                <p>{{(index $data.Relations $k)}} </p>
-                            </div>
-                            <div>
-                                <iframe width='600px' height='600px' src="https://api.mapbox.com/styles/v1/ninjawill543/cld4bwm4c000h01tbd9cr3hun/static/pin-l-music+dd380f(-79.3896838690365,35.5568849207634),pin-l-music+dd380f(-83.2572560296474,32.3305706594431),pin-l-music+dd380f(-118.242766,34.053691),pin-l-music+dd380f(139.645796,35.86164),pin-l-music+dd380f(135.501454,34.693757),pin-l-music+dd380f(136.899844,35.185105),pin-l-music+dd380f(174.8148,-36.9111),pin-l-music+dd380f(170.503575,-45.874098)/20,0,0/600x600?access_token=pk.eyJ1IjoibmluamF3aWxsNTQzIiwiYSI6ImNsZDRidWdrNjBvbDczcW9jajU5c3UxdXAifQ._jM-ztlL3-V9_0WjlFB01A" title="Outdoors" style="border:none;"></iframe>
+                <div>
+                    <label for="date-max" style="color: aliceblue;">Date (max):</label>
+                    <input type="range" name="date-max" id="date-max" min="1900" max="2022" value="1900">
+                </div>
+                <input type="submit" value="FILTER">
+            </form>
+          </div>
+          
+    
+        <main>
+            <!-- Division de recherche -->
+            <div class="search-div">
+                <!-- Titre de la page -->
+                <h1>API Groupie Tracker</h1>
+                <!-- Formulaire de recherche -->
+                <form action="/" method="POST">
+                    <!-- Bouton de recherche -->
+                    <input type="search" name="search" id="search" placeholder="Search.." autofocus autocomplete="off">
+                </form>
+                <!-- Filtre de recherche -->
+                <span style="cursor:pointer;" onclick="openNav()"><button class="filter-btn">FILTER</button></span>
+            </div>
+            <!-- Affichage des cards -->
+            <div class="cards">
+                <!-- Récupération de la card -->
+                {{$data := .}}
+                {{ range $k, $v := .Artists }}
+                <div class="card">
+                    <img src={{ $v.Image}} alt={{ $v.Name}}>
+                    <div class="info-card">
+                        <a href="#popup{{ $k }}">
+                            <h4>{{ $v.Name}}</h4>
+                            {{ range $v.Members }}
+                            <p class="members">- {{ . }}</p>
+                            {{ end }}
+                        </a>    
+                    </div>
+                    <div id="popup{{ $k }}" class="overlay">
+                        <div class="popup">
+                            <a class="close" href="#">&times;</a>
+                            <div class="content">
+                                <div>
+                                    <h2>{{ $v.Name}}</h2>
+                                    <p>Members:</p>
+                                    <p>
+                                    {{ range $v.Members }}
+                                        {{ . }},
+                                    {{ end }}
+                                    </p>
+                                    <p>Creation date: {{ $v.CreationDate}}</p>
+                                    <p>First album: {{ $v.FirstAlbum}}</p>
+                                    <h2>Concert:</h2>
+                                    <p>{{index $data.Relations $k}}</p>
+                                </div>
+                                <div>
+                                    <iframe width='600px' height='600px' src="https://api.mapbox.com/styles/v1/ninjawill543/cld4bwm4c000h01tbd9cr3hun/static/pin-l-music+dd380f(-79.3896838690365,35.5568849207634),pin-l-music+dd380f(-83.2572560296474,32.3305706594431),pin-l-music+dd380f(-118.242766,34.053691),pin-l-music+dd380f(139.645796,35.86164),pin-l-music+dd380f(135.501454,34.693757),pin-l-music+dd380f(136.899844,35.185105),pin-l-music+dd380f(174.8148,-36.9111),pin-l-music+dd380f(170.503575,-45.874098)/20,0,0/600x600?access_token=pk.eyJ1IjoibmluamF3aWxsNTQzIiwiYSI6ImNsZDRidWdrNjBvbDczcW9jajU5c3UxdXAifQ._jM-ztlL3-V9_0WjlFB01A" title="Outdoors" style="border:none;"></iframe>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                 </div>
+                     </div>
+                </div>
+                {{end}}
             </div>
-            {{end}}
-        </div>
-    </main>
-    <footer>
-        <!-- Affichage des noms des membres du groupe -->
-        <h2>DIEDERICHS Geoffrey | FATH Maël | HANSON Lucas</h2>
-    </footer>
+        </main>
+        <footer>
+            <!-- Affichage des noms des membres du groupe -->
+            <h2>DIEDERICHS Geoffrey | FATH Maël | HANSON Lucas</h2>
+        </footer>
+    </section>
+    <script src="./assets/index.js"></script>
 </body>
 </html>
