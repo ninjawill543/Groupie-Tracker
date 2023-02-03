@@ -103,26 +103,4 @@ func FormatConcertString(s string) []string {
 	}
 
 	return formated
-} 
-
-func FilterCreationDate(artistsData Artists, mode int, date int) []int {
-	var idOverDate []int
-	for _, i := range artistsData {
-		switch mode {
-		case 0:
-			if i.CreationDate == date {
-				idOverDate = append(idOverDate, i.ID)
-			}
-		case 1:
-			if i.CreationDate < date {
-				idOverDate = append(idOverDate, i.ID)
-			}
-		case 2:
-			if i.CreationDate > date {
-				idOverDate = append(idOverDate, i.ID)
-			}
-		}
-	}
-
-	return idOverDate
 }
