@@ -60,6 +60,16 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(groupData.Artists[i].Name)
 		}
 		fmt.Println()
+
+		var test api.Artists
+		if result > -1 {
+			test = append(test, groupData.Artists[result-1])
+		}
+		for _, i := range similarities {
+			test = append(test, groupData.Artists[i])
+		}
+		fmt.Println(test)
+		fmt.Println()
 	}
 
 	tmpl.Execute(w, groupData) // Execute le code html en fonction des changements de variables
