@@ -49,27 +49,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	if len(input) > 0 {
 		fmt.Println("Request : ", input)
-		result, similarities := api.Search(input, groupData.Artists)
-		if result > -1 {
-			fmt.Println(groupData.Artists[result-1].ID, groupData.Artists[result-1].Name)
-		} else {
-			fmt.Println("Not found")
-		}
-		fmt.Println("Maybe looking for :")
-		for _, i := range similarities {
-			fmt.Println(groupData.Artists[i].Name)
-		}
-		fmt.Println()
-
-		var test api.Artists
-		if result > -1 {
-			test = append(test, groupData.Artists[result-1])
-		}
-		for _, i := range similarities {
-			test = append(test, groupData.Artists[i])
-		}
-		fmt.Println(test)
-		fmt.Println()
+		result := api.Search(input, groupData.Artists)
+		fmt.Println(IdToJson(groupData, result))
 	}
 
 	tmpl.Execute(w, groupData) // Execute le code html en fonction des changements de variables
@@ -85,4 +66,13 @@ func InitializeData() datasJson {
 	apiData.Relations = api.GetConcerts(string(api.ExtractRawData(3)))
 
 	return apiData
+}
+
+func IdToJson(groupData datasJson, id []int) datasJson {
+	var data datasJson
+	for _, i := range id {
+		data.Artists = append(data.Artists, groupData.Artists[i])
+		data.Relations = append(data.Relations, groupData.Relations[i])
+	}
+	return data
 }
