@@ -13,17 +13,40 @@
 
     </div>
     <section id="loading">
+        {{$data := .}}
         <div id="mySidenav" class="sidenav">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             <form action="/" method="POST">
+                <label for="creation-date" id="creation-date-label">Creation date: </label>
+                <input onchange="creationDate()" type="range" name="creation-date" id="creation-date" min="1900" max="2022" value="1900">
+                <label for="first-album-date" id="first-album-date-label">First album date: </label>
+                <input onchange="firstAlbumDate()" type="range" name="first-album-date" id="first-album-date" min="1900" max="2022" value="1900">
+                <p>Members:</p>
                 <div>
-                    <label for="date-min" style="color: aliceblue;">Date (min):</label>
-                    <input type="range" name="date-min" id="date-min" min="1900" max="2022" value="2022">
+                    <label for="one-member">1</label>
+                    <input type="checkbox" name="members" id="one-member">
+                    <label for="two-members">2</label>
+                    <input type="checkbox" name="members" id="two-members">
+                    <label for="three-members">3</label>
+                    <input type="checkbox" name="members" id="three-members">
+                    <label for="four-members">4</label>
+                    <input type="checkbox" name="members" id="four-members">
+                    <label for="five-members">5</label>
+                    <input type="checkbox" name="members" id="five-members">
+                    <label for="six-members">6</label>
+                    <input type="checkbox" name="members" id="six-members">
+                    <label for="seven-members">7</label>
+                    <input type="checkbox" name="members" id="seven-members">
                 </div>
-                <div>
-                    <label for="date-max" style="color: aliceblue;">Date (max):</label>
-                    <input type="range" name="date-max" id="date-max" min="1900" max="2022" value="1900">
-                </div>
+                <label for="location">Locations of concerts:</label>
+                <select name="location" id="location">
+                    <option disabled selected>-- Selected a location --</option>
+                    {{ range $data.Locations.Index }}
+                        {{ range .Locations}}
+                        <option value="{{.}}">{{.}}</option>
+                        {{ end }}
+                    {{ end}}
+                </select>
                 <input type="submit" value="FILTER">
             </form>
           </div>
@@ -45,7 +68,6 @@
             <!-- Affichage des cards -->
             <div class="cards">
                 <!-- Récupération de la card -->
-                {{$data := .}}
                 {{ range $k, $v := .Artists }}
                 <div class="card">
                     <img src={{ $v.Image}} alt={{ $v.Name}}>
@@ -63,10 +85,10 @@
                             <div class="content">
                                 <div>
                                     <h2>{{ $v.Name}}</h2>
-                                    <p>Members:</p>
+                                    <h3>Members:</h3>
                                     <p>
                                     {{ range $v.Members }}
-                                        {{ . }},
+                                        <p>{{ . }},</p>
                                     {{ end }}
                                     </p>
                                     <p>Creation date: {{ $v.CreationDate}}</p>

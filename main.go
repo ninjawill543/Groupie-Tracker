@@ -45,12 +45,26 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	input := r.Form.Get("search") // Récupère la saisie du joueur
+	input := r.Form.Get("search") // Récupère la recherche
+
+	// Récupère la date de creation dans les filtres
+	creationDate := r.Form.Get("creation-date")
+	// Récupère la date du première album dans les filtres
+	firstAlbumDate := r.Form.Get("first-album-date")
+	// Récupère une liste avec les nombres de membres
+	members := r.Form.Get("members")
+	// Récupère la location dans les filtres
+	location := r.Form.Get("location")
+
+	fmt.Println(creationDate, firstAlbumDate, members, location)
 
 	if len(input) > 0 {
 		fmt.Println("Request : ", input)
 		result := api.Search(input, groupData.Artists)
 		fmt.Println(IdToJson(groupData, result))
+		groupData = IdToJson(groupData, result)
+	} else {
+		groupData = InitializeData()
 	}
 
 	tmpl.Execute(w, groupData) // Execute le code html en fonction des changements de variables

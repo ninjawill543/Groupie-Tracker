@@ -20,10 +20,15 @@ GLOBAL STYLES
     padding: 0;
 }
 
-html, body {
+body {
+    position: relative;
     background: var(--grey);
     font-family: Jetbrains, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    height: 100vh;
+    min-height: 99vh;
+}
+
+main {
+  padding-bottom: 100px;
 }
 
 #loading {
@@ -43,6 +48,7 @@ form {
     display: flex;
     justify-content: center;
     align-items: center;
+    color: aliceblue;
 }
 
 .search-div {
@@ -86,9 +92,9 @@ form {
 .filter-btn, .sidenav input[type="submit"] {
   color: white;
   border: 0;
-  padding: 12px 40px;
-  margin: 5px;
-  border-radius: 30px;
+  padding: 6px 20px;
+  margin: 15px;
+  border-radius: 5px;
   background-color: var(--red);
   text-decoration: none;
   font-size: medium;
@@ -247,7 +253,7 @@ form {
 }
 
 .popup p {
-    margin: 20px 0;
+    margin: 4px 0;
 }
 
 .popup .close {
@@ -303,6 +309,8 @@ iframe {
 /* Footer */
 
 footer {
+  position: absolute;
+  bottom: 0px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -366,4 +374,28 @@ footer {
             box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white, 26px 32px 0 4px var(--red); } }
 a {
   text-decoration: none;
+  color: white;
+}
+
+select {
+  padding: 5px 10px;
+  border-radius: 5px 5px 0 0;
+  background-color: white;
+  font-family: Jetbrains, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  background-color: var(--red);
+  color: var(--red);
+  border-radius: 20px;
+  height: 14px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background-color: #ca0000;
+  border-radius: 50px;
+  height: 16px;
+  width: 16px;
 }
