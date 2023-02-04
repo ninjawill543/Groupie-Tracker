@@ -1,10 +1,9 @@
 package apiFunctions
 
 import (
-	"fmt"
 )
 
-func Search(input string, artistsData Artists) (int, [5]int) {
+func Search(input string, artistsData Artists) []int {
 	input = Minimalize(input)
 	var similarities []int
 	id := -1
@@ -15,8 +14,6 @@ func Search(input string, artistsData Artists) (int, [5]int) {
 		}
 		similarities = append(similarities, CheckSimilarities(input, name))
 	}
-
-	fmt.Println(similarities)
 
 	max := 0
 	maxId := 0
@@ -43,7 +40,20 @@ func Search(input string, artistsData Artists) (int, [5]int) {
 		max = 0
 	}
 
-	return id, maxSimilarities	
+	var solution []int
+	for _, i := range maxSimilarities {
+		solution = append(solution, i)
+	}
+	if id > -1 {
+		for i1, i2 := range solution {
+			if (i2 == id) && (i1 != 0) {
+				solution = append(solution[0:i1], solution[i1+1:]...)
+				solution = append([]int{id}, solution...)
+			}
+		}
+	}
+
+	return solution
 }
 
 func Minimalize(s string) string {
