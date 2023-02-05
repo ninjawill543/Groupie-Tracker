@@ -1,49 +1,42 @@
 package apiFunctions
 
 import(
-	
+	"strconv"
+	"fmt"
 )
 
-func FilterCreationDate(artistsData Artists, mode int, date int) []int {
+func FilterCreationDate(artistsData Artists, min int, max int) []int {
 	var id []int
 	for _, i := range artistsData {
-		switch mode {
-		case 0:
-			if i.CreationDate == date {
-				id = append(id, i.ID)
-			}
-		case 1:
-			if i.CreationDate < date {
-				id = append(id, i.ID)
-			}
-		case 2:
-			if i.CreationDate > date {
-				id = append(id, i.ID)
-			}
+		if (i.CreationDate > min) && (i.CreationDate < max) {
+			id = append(id, i.ID-1)
 		}
 	}
 
 	return id
 }
 
-func FilterFirstAlbum(artistsData Artists, mode int, date string) []int {
+func FilterFirstAlbum(artistsData Artists, min int, max int) []int {
 	var id []int
 	for _, i := range artistsData {
-		if i.FirstAlbum == date {
-			id = append(id, i.ID)
+		date, err := strconv.Atoi(i.FirstAlbum[len(i.FirstAlbum)-4:])
+		if err == nil {
+			if (date > min) && (date < max) {
+				id = append(id, i.ID-1)
+			}
+		} else {
+			fmt.Println("error FilterFirstAlbum")
 		}
 	}
 
 	return id
 }
 
-func FilterConcertDate(datesData Dates, mode int, date string) []int {
+func FilterMembers(artistsData Artists, members int) []int {
 	var id []int
-	for _, i := range datesData.Index {
-		for _, k := range i.Dates {
-			if k == date {
-				id = append(id, i.ID)
-			}
+	for _, i := range artistsData {
+		if len(i.Members) == members {
+			id = append(id, i.ID-1)
 		}
 	}
 
