@@ -48,9 +48,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	input := r.Form.Get("search") // Récupère la recherche
 
 	// Récupère la date de creation dans les filtres
-	creationDate := r.Form.Get("creation-date")
+	creationDateMin := r.Form.Get("creation-date-min")
+	creationDateMax := r.Form.Get("creation-date-max")
 	// Récupère la date du première album dans les filtres
-	firstAlbumDate := r.Form.Get("first-album-date")
+	firstAlbumDateMin := r.Form.Get("first-album-date-min")
+	firstAlbumDateMax := r.Form.Get("first-album-date-max")
 	// Récupère une liste avec les nombres de membres
 	members := r.Form.Get("members")
 	// Récupère la location dans les filtres

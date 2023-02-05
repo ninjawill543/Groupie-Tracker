@@ -17,10 +17,14 @@
         <div id="mySidenav" class="sidenav">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             <form action="/" method="POST">
-                <label for="creation-date" id="creation-date-label">Creation date: </label>
-                <input onchange="creationDate()" type="range" name="creation-date" id="creation-date" min="1900" max="2022" value="1900">
-                <label for="first-album-date" id="first-album-date-label">First album date: </label>
-                <input onchange="firstAlbumDate()" type="range" name="first-album-date" id="first-album-date" min="1900" max="2022" value="1900">
+                <label for="creation-date-min" id="creation-date-min-label">Creation date (min): </label>
+                <input onchange="creationDateMin()" type="range" name="creation-date-min" id="creation-date-min" min="1900" max="2022" value="1900">
+                <label for="creation-date-max" id="creation-date-max-label">Creation date (max): </label>
+                <input onchange="creationDateMax()" type="range" name="creation-date-max" id="creation-date-max" min="1900" max="2022" value="2022">
+                <label for="first-album-date-min" id="first-album-date-min-label">First album date (min): </label>
+                <input onchange="firstAlbumDateMin()" type="range" name="first-album-date-min" id="first-album-date-min" min="1900" max="2022" value="1900">
+                <label for="first-album-date-max" id="first-album-date-max-label">First album date (max): </label>
+                <input onchange="firstAlbumDateMax()" type="range" name="first-album-date-max" id="first-album-date-max" min="1900" max="2022" value="2022">
                 <p>Members:</p>
                 <div>
                     <label for="one-member">1</label>
@@ -56,7 +60,7 @@
             <!-- Division de recherche -->
             <div class="search-div">
                 <!-- Titre de la page -->
-                <h1>API Groupie Tracker</h1>
+                <a href=""><h1>API Groupie Tracker</h1></a>
                 <!-- Formulaire de recherche -->
                 <form action="/" method="POST">
                     <!-- Bouton de recherche -->
@@ -88,7 +92,7 @@
                                     <h3>Members:</h3>
                                     <p>
                                     {{ range $v.Members }}
-                                        <p>{{ . }},</p>
+                                        <p>- {{ . }}</p>
                                     {{ end }}
                                     </p>
                                     <p>Creation date: {{ $v.CreationDate}}</p>

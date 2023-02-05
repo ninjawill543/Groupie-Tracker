@@ -13,16 +13,29 @@ function loading() {
 };
 loading();
 
-var firstAlbumDateInput = document.getElementById('first-album-date');
-var firstAlbumDateLabel = document.getElementById('first-album-date-label');
-function firstAlbumDate() {
-  firstAlbumDateLabel.innerHTML = "First album date: " + firstAlbumDateInput.value;
+var firstAlbumDateMinInput = document.getElementById('first-album-date-min');
+var firstAlbumDateMinLabel = document.getElementById('first-album-date-min-label');
+function firstAlbumDateMin() {
+  firstAlbumDateMinLabel.innerHTML = "First album date (min): " + firstAlbumDateMinInput.value;
 }
-firstAlbumDateLabel.innerHTML = "First album date: " + firstAlbumDateInput.value;
+firstAlbumDateMinLabel.innerHTML = "First album date (min): " + firstAlbumDateMinInput.value;
+var firstAlbumDateMaxInput = document.getElementById('first-album-date-max');
+var firstAlbumDateMaxLabel = document.getElementById('first-album-date-max-label');
+function firstAlbumDateMax() {
+  firstAlbumDateMaxLabel.innerHTML = "First album date (max): " + firstAlbumDateMaxInput.value;
+}
+firstAlbumDateMaxLabel.innerHTML = "First album date (max): " + firstAlbumDateMaxInput.value;
 
-var creationDateInput = document.getElementById('creation-date');
-var creationDateLabel = document.getElementById('creation-date-label');
-function creationDate() {
-  creationDateLabel.innerHTML = "Creation date: " + creationDateInput.value;
+var creationDateMinInput = document.getElementById('creation-date-min');
+var creationDateMinLabel = document.getElementById('creation-date-min-label');
+function creationDateMin() {
+  creationDateMinLabel.innerHTML = "Creation date (min): " + creationDateMinInput.value;
 }
-creationDateLabel.innerHTML = "Creation date: " + creationDateInput.value;
+creationDateMinLabel.innerHTML = "Creation date (min): " + creationDateMinInput.value;
+
+var creationDateMaxInput = document.getElementById('creation-date-max');
+var creationDateMaxLabel = document.getElementById('creation-date-max-label');
+function creationDateMax() {
+  creationDateMaxLabel.innerHTML = "Creation date (max): " + creationDateMaxInput.value;
+}
+creationDateMaxLabel.innerHTML = "Creation date (max): " + creationDateMaxInput.value;
