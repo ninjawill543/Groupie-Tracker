@@ -23,9 +23,7 @@ type datasJson struct {
 
 var groupData datasJson
 
-func main() {
-	groupData = InitializeData()
-	
+func main() {	
 	fs := http.FileServer(http.Dir("./static/assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 	http.HandleFunc("/", Handler)
@@ -33,7 +31,7 @@ func main() {
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-
+	groupData = InitializeData()
 	tmpl := template.Must(template.ParseFiles("./static/index.html")) // Affiche la page
 
 	// Affiche dans le terminal l'activité sur le site
@@ -62,7 +60,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(creationDateMin, creationDateMax, firstAlbumDateMin, firstAlbumDateMax, members, location)
 
 	if len(creationDateMin) > 0 {
-		mockData := InitializeData()
+		mockData := groupData
 		var id []int
 		for i := 1; i < 52; i++ {
 			id = append(id, i)
