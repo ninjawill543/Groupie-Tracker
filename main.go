@@ -54,7 +54,13 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	firstAlbumDateMin := r.Form.Get("first-album-date-min")
 	firstAlbumDateMax := r.Form.Get("first-album-date-max")
 	// Récupère une liste avec les nombres de membres
-	members := r.Form.Get("members")
+	oneMember := r.Form.Get("one-member")
+	twoMembers := r.Form.Get("two-members")
+	threeMembers := r.Form.Get("three-members")
+	fourMembers := r.Form.Get("four-members")
+	fiveMembers := r.Form.Get("five-members")
+	sixMembers := r.Form.Get("six-members")
+	sevenMembers := r.Form.Get("seven-members")
 	// Récupère la location dans les filtres
 	location := r.Form.Get("location")
 
