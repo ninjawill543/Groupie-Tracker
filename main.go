@@ -10,6 +10,7 @@ import (
 	"fmt"
 	api "apiFunctions/api"
 	"encoding/json"
+	"strconv"
 )
 	
 // Structure pour contenir les données de l'api
@@ -22,9 +23,7 @@ type datasJson struct {
 
 var groupData datasJson
 
-func main() {
-	groupData = InitializeData()
-	
+func main() {	
 	fs := http.FileServer(http.Dir("./static/assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 	http.HandleFunc("/", Handler)
@@ -32,7 +31,7 @@ func main() {
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-
+	groupData = InitializeData()
 	tmpl := template.Must(template.ParseFiles("./static/index.html")) // Affiche la page
 
 	// Affiche dans le terminal l'activité sur le site
@@ -64,13 +63,81 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	// Récupère la location dans les filtres
 	location := r.Form.Get("location")
 
-	fmt.Println(creationDateMin, creationDateMax, firstAlbumDateMin, firstAlbumDateMax, members, location)
+	fmt.Println(creationDateMin, creationDateMax, firstAlbumDateMin, firstAlbumDateMax, location)
+
+	if len(creationDateMin) > 0 {
+		mockData := groupData
+		var id []int
+		for i := 1; i < 52; i++ {
+			id = append(id, i)
+		}
+
+		min, err1 := strconv.Atoi(creationDateMin)
+		max, err2 := strconv.Atoi(creationDateMax)
+		if (err1 == nil) && (err2 == nil) {
+			id = api.FilterCreationDate(groupData.Artists, min-1, max+1)
+			groupData = IdToJson(mockData, id)
+		} else {
+			fmt.Println("error main creationDate")
+			fmt.Println(err1, err2)
+		}
+
+		min, err1 = strconv.Atoi(firstAlbumDateMin)
+		max, err2 = strconv.Atoi(firstAlbumDateMax)
+		if (err1 == nil) && (err2 == nil) {
+			id = api.FilterFirstAlbum(groupData.Artists, min-1, max+1)
+			groupData = IdToJson(mockData, id)
+		} else {
+			fmt.Println("error main firstAlbum")
+			fmt.Println(err1, err2)
+		}
+
+		if len(location) > 0 {
+			id = api.FilterLocations(groupData.Locations, location)
+			groupData = IdToJson(mockData, id)
+		}
+
+		id = []int{}
+		membersFiltered := 0
+		if oneMember == "on" {
+			id = append(id, api.FilterMembers(groupData.Artists, 1)...)
+			membersFiltered++
+		}
+		if twoMembers == "on" {
+			id = append(id, api.FilterMembers(groupData.Artists, 2)...)
+			membersFiltered++
+		}
+		if threeMembers == "on" {
+			id = append(id, api.FilterMembers(groupData.Artists, 3)...)
+			membersFiltered++
+		}
+		if fourMembers == "on" {
+			id = append(id, api.FilterMembers(groupData.Artists, 4)...)
+			membersFiltered++
+		}
+		if fiveMembers == "on" {
+			id = append(id, api.FilterMembers(groupData.Artists, 5)...)
+			membersFiltered++
+		}
+		if sixMembers == "on" {
+			id = append(id, api.FilterMembers(groupData.Artists, 6)...)
+			membersFiltered++
+		}
+		if sevenMembers == "on" {
+			id = append(id, api.FilterMembers(groupData.Artists, 7)...)
+			membersFiltered++
+		}
+		
+		if membersFiltered > 0 {
+			groupData = IdToJson(mockData, id)
+		}
+
+		fmt.Println(id)
+	}
 
 	if len(input) > 0 {
-		result := api.Search(input, groupData.Artists)
+		result := api.Search(input, groupData.Artists, groupData.Locations)
 		groupData = IdToJson(groupData, result)
-	} else {
-		groupData = InitializeData()
 	}
 
 	tmpl.Execute(w, groupData) // Execute le code html en fonction des changements de variables
@@ -92,6 +159,8 @@ func IdToJson(groupData datasJson, id []int) datasJson {
 	var data datasJson
 	for _, i := range id {
 		data.Artists = append(data.Artists, groupData.Artists[i])
+		data.Locations.Index = append(data.Locations.Index, groupData.Locations.Index[i])
+		data.Dates.Index = append(data.Dates.Index, groupData.Dates.Index[i])
 		data.Relations = append(data.Relations, groupData.Relations[i])
 	}
 
