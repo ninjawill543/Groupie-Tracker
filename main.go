@@ -58,7 +58,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	// Récupère la location dans les filtres
 	location := r.Form.Get("location")
 
-	fmt.Println(creationDate, firstAlbumDate, members, location)
+	fmt.Println(creationDateMin, creationDateMax, firstAlbumDateMin, firstAlbumDateMax, members, location)
 
 	if len(input) > 0 {
 		result := api.Search(input, groupData.Artists)
@@ -88,6 +88,6 @@ func IdToJson(groupData datasJson, id []int) datasJson {
 		data.Artists = append(data.Artists, groupData.Artists[i])
 		data.Relations = append(data.Relations, groupData.Relations[i])
 	}
-	
+
 	return data
 }
