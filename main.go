@@ -59,9 +59,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(creationDate, firstAlbumDate, members, location)
 
 	if len(input) > 0 {
-		fmt.Println("Request : ", input)
 		result := api.Search(input, groupData.Artists)
-		fmt.Println(IdToJson(groupData, result))
 		groupData = IdToJson(groupData, result)
 	} else {
 		groupData = InitializeData()
@@ -88,5 +86,6 @@ func IdToJson(groupData datasJson, id []int) datasJson {
 		data.Artists = append(data.Artists, groupData.Artists[i])
 		data.Relations = append(data.Relations, groupData.Relations[i])
 	}
+	
 	return data
 }
