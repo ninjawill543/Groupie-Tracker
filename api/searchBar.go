@@ -1,28 +1,46 @@
 package apiFunctions
 
 import (
+	"fmt"
+	"strconv"
 )
 
-func Search(input string, artistsData Artists) []int {
+func Search(input string, artistsData Artists, artistsLocations Locations) []int {
 	input = Minimalize(input)
 	var similarities []int
-	id := -1
+	var id []int
 	for _, i := range artistsData {
-		name := Minimalize(i.Name)
-		if input == Minimalize(name) {
-			id = i.ID
+		if (input == Minimalize(i.Name)) || (input == i.FirstAlbum[len(i.FirstAlbum)-4:]) || (input == strconv.Itoa(i.CreationDate)) {
+			id = append(id, i.ID-1)
+		} else {
+			for _, k := range i.Members {
+				if input == Minimalize(k) {
+					id = append(id, i.ID-1)
+					break
+				}
+			}
+			if (len(id) == 0) || (id[len(id)-1] != i.ID-1) {
+				for _, k := range artistsLocations.Index[i.ID-1].Locations {
+					if input == Minimalize(k) {
+						id = append(id, i.ID-1)
+						break
+					}
+				}
+			}
 		}
-		similarities = append(similarities, CheckSimilarities(input, name))
+		similarities = append(similarities, CheckSimilarities(input, i.Name))
 	}
+
+	fmt.Println(id)
 
 	max := 0
 	maxId := 0
-	var maxSimilarities [5]int
+	var maxSimilarities [10]int
 	for i := range maxSimilarities {
 		maxSimilarities[i] = -1
 	}
 	index := 0
-	for index < 5 {
+	for index < len(maxSimilarities) {
 		for i1, i2 := range similarities {
 			if i2 > max {
 				for k1, k2 := range maxSimilarities {
@@ -35,23 +53,40 @@ func Search(input string, artistsData Artists) []int {
 				}
 			}
 		}
-		maxSimilarities[index] = maxId
+		if similarities[maxId] > 0 {
+			for _, i := range maxSimilarities {
+				if maxId == i {
+					break
+				} else if i == maxSimilarities[len(maxSimilarities)-1] {
+					maxSimilarities[index] = maxId
+				}
+			}
+		}
 		index++
 		max = 0
 	}
 
+	fmt.Println(similarities)
+
 	var solution []int
 	for _, i := range maxSimilarities {
-		solution = append(solution, i)
-	}
-	if id > -1 {
-		for i1, i2 := range solution {
-			if (i2 == id) && (i1 != 0) {
-				solution = append(solution[0:i1], solution[i1+1:]...)
-				solution = append([]int{id}, solution...)
-			}
+		if (i > -1) && (similarities[i] > 0) {
+			solution = append(solution, i)
 		}
 	}
+	if len(id) > 0 {
+		for _, i := range id {
+			for k1, k2 := range solution {
+				if i == k2 {
+					solution = append(solution[0:k1], solution[k1+1:]...)
+					break
+				}
+			}
+			solution = append([]int{i}, solution...)
+		}
+	}
+
+	fmt.Println(solution)
 
 	return solution
 }

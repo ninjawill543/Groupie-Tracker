@@ -106,7 +106,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(input) > 0 {
-		result := api.Search(input, groupData.Artists)
+		result := api.Search(input, groupData.Artists, groupData.Locations)
 		groupData = IdToJson(groupData, result)
 	}
 
