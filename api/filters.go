@@ -48,7 +48,7 @@ func FilterLocations(locationsData Locations, location string) []int {
 	for _, i := range locationsData.Index {
 		for _, k := range i.Locations {
 			if k == location {
-				id = append(id, i.ID)
+				id = append(id, i.ID-1)
 				break
 			}
 		}

@@ -99,8 +99,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		fmt.Println(id)
-
 		if len(location) > 0 {
 			idLocation := api.FilterLocations(groupData.Locations, location)
 			var newId []int
