@@ -98,17 +98,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if len(location) > 0 {
-			idLocation := api.FilterLocations(groupData.Locations, location)
-			var newId []int
-			for _, i := range id {
-				for _, k := range idLocation {
-					if i == k {
-						newId = append(newId, i)
-					}
-				}
-			}
-			id = newId
-			groupData = IdToJson(mockData, newId)
+			id = api.FilterLocations(groupData.Locations, location)
+			groupData = IdToJson(mockData, id)
 		}
 
 		fmt.Println(id)
