@@ -4,10 +4,8 @@ import (
     "encoding/json"
     "fmt"
     "io/ioutil"
-    "log"
+    //"log"
     "net/http"
-	"html/template"
-	//"os"
 )
 
 type Response struct {
@@ -67,13 +65,19 @@ func GetCoords(place string) string {
 }
 
 func SendMarker(places []string)string{
-	//places := []string{}
 	markerbase := "pin-l-music+dd380f("
 	endmarker := ""
 	for _, element := range places {
 		funccoord := GetCoords(element)
 		endmarker = endmarker + markerbase + funccoord + ")," 
 	}
-	return(string([]rune(endmarker)[:len(endmarker)-1]))
+	return("https://api.mapbox.com/styles/v1/ninjawill543/cld4bwm4c000h01tbd9cr3hun/static/" + string([]rune(endmarker)[:len(endmarker)-1]) + "/20,0,1/1000x1000?access_token=pk.eyJ1IjoibmluamF3aWxsNTQzIiwiYSI6ImNsZDRidWdrNjBvbDczcW9jajU5c3UxdXAifQ._jM-ztlL3-V9_0WjlFB01A")
 }
+
+
+
+// func main() {
+// 	sendMarker([]string{"playa_del_carmen-mexico","papeete-french_polynesia","noumea-new_caledonia"})
+	
+// }
 

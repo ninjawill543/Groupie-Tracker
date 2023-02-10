@@ -24,7 +24,7 @@ var groupData datasJson
 
 func main() {
 	groupData = InitializeData()
-    fmt.Println(groupData.Locations.Index[0].Locations[0])
+	fmt.Println(MapsPls(1))
 	fs := http.FileServer(http.Dir("./static/assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 	http.HandleFunc("/", Handler)
@@ -64,3 +64,8 @@ func InitializeData() datasJson {
 	apiData.Relations = api.GetConcerts(string(api.ExtractRawData(3)))
 	return apiData
 }
+
+func MapsPls(artID int) string{
+	url := api.SendMarker(groupData.Locations.Index[artID].Locations)
+	return(url)
+}	
