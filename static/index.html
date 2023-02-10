@@ -98,10 +98,10 @@
                                     <p>Creation date: {{ $v.CreationDate}}</p>
                                     <p>First album: {{ $v.FirstAlbum}}</p>
                                     <h2>Concert:</h2>
-                                    <p>{{index $data.Relations $k}}</p>
+                                    <p class="concert">{{index $data.Relations $k}}</p>
                                 </div>
                                 <div>
-                                    <iframe width='600px' height='600px' src="https://api.mapbox.com/styles/v1/ninjawill543/cld4bwm4c000h01tbd9cr3hun/static/pin-l-music+dd380f(-79.3896838690365,35.5568849207634),pin-l-music+dd380f(-83.2572560296474,32.3305706594431),pin-l-music+dd380f(-118.242766,34.053691),pin-l-music+dd380f(139.645796,35.86164),pin-l-music+dd380f(135.501454,34.693757),pin-l-music+dd380f(136.899844,35.185105),pin-l-music+dd380f(174.8148,-36.9111),pin-l-music+dd380f(170.503575,-45.874098)/20,0,0/600x600?access_token=pk.eyJ1IjoibmluamF3aWxsNTQzIiwiYSI6ImNsZDRidWdrNjBvbDczcW9jajU5c3UxdXAifQ._jM-ztlL3-V9_0WjlFB01A" title="Outdoors" style="border:none;"></iframe>
+                                    <img src={{ $v.Image}} alt={{ $v.Name}}>
                                 </div>
                             </div>
                         </div>

@@ -9,7 +9,7 @@ function loading() {
   setTimeout(function () {
     document.getElementById("loading").style.display = "block";
     document.getElementById("dots-flow").style.display = "none";
-  }, 3000);
+  }, 2000);
 };
 loading();
 
