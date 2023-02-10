@@ -23,11 +23,14 @@ type datasJson struct {
 }
 
 var groupData datasJson
+var maps []string
 
 func main() {
 	groupData = InitializeData()
+	maps = api.SendMaps(groupData.Locations)
+	groupData.Maps = maps
 
-	fmt.Println(groupData.Maps)
+	fmt.Println("Data loaded")
 
 	fs := http.FileServer(http.Dir("./static/assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
@@ -157,7 +160,7 @@ func InitializeData() datasJson {
 	json.Unmarshal(api.ExtractRawData(1), &apiData.Locations)
 	json.Unmarshal(api.ExtractRawData(2), &apiData.Dates)
 	apiData.Relations = api.GetConcerts(string(api.ExtractRawData(3)))
-	apiData.Maps = api.SendMaps(apiData.Locations)
+	apiData.Maps = maps
 	return apiData
 }
 
@@ -168,6 +171,7 @@ func IdToJson(groupData datasJson, id []int) datasJson {
 		data.Locations.Index = append(data.Locations.Index, groupData.Locations.Index[i])
 		data.Dates.Index = append(data.Dates.Index, groupData.Dates.Index[i])
 		data.Relations = append(data.Relations, groupData.Relations[i])
+		data.Maps = append(data.Maps, groupData.Maps[i])
 	}
 
 	return data
