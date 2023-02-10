@@ -19,11 +19,16 @@ type datasJson struct {
 	Locations api.Locations // Lieux des concerts
 	Dates api.Dates // Dates des concerts
 	Relations []string
+	Maps []string
 }
 
 var groupData datasJson
 
-func main() {	
+func main() {
+	groupData = InitializeData()
+
+	fmt.Println(groupData.Maps)
+
 	fs := http.FileServer(http.Dir("./static/assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 	http.HandleFunc("/", Handler)
@@ -32,6 +37,7 @@ func main() {
 
 func Handler(w http.ResponseWriter, r *http.Request) {
 	groupData = InitializeData()
+
 	tmpl := template.Must(template.ParseFiles("./static/index.html")) // Affiche la page
 
 	// Affiche dans le terminal l'activité sur le site
@@ -151,7 +157,7 @@ func InitializeData() datasJson {
 	json.Unmarshal(api.ExtractRawData(1), &apiData.Locations)
 	json.Unmarshal(api.ExtractRawData(2), &apiData.Dates)
 	apiData.Relations = api.GetConcerts(string(api.ExtractRawData(3)))
-
+	apiData.Maps = api.SendMaps(apiData.Locations)
 	return apiData
 }
 

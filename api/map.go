@@ -4,7 +4,6 @@ import (
     "encoding/json"
     "fmt"
     "io/ioutil"
-    //"log"
     "net/http"
 )
 
@@ -39,8 +38,6 @@ type Response struct {
 	Attribution string `json:"attribution"`
 }
 
-
-
 func GetCoords(place string) string {
     resp, err := http.Get("https://api.mapbox.com/geocoding/v5/mapbox.places/" + place + ".json?proximity=ip&limit=1&access_token=pk.eyJ1IjoibmluamF3aWxsNTQzIiwiYSI6ImNsZDRidWdrNjBvbDczcW9jajU5c3UxdXAifQ._jM-ztlL3-V9_0WjlFB01A")
     if err != nil {
@@ -61,6 +58,7 @@ func GetCoords(place string) string {
 		long := dos[1 : len(dos)-1]
 		send = (lat + "," + long)
     }
+
 	return send 
 }
 
@@ -71,13 +69,15 @@ func SendMarker(places []string)string{
 		funccoord := GetCoords(element)
 		endmarker = endmarker + markerbase + funccoord + ")," 
 	}
-	return("https://api.mapbox.com/styles/v1/ninjawill543/cld4bwm4c000h01tbd9cr3hun/static/" + string([]rune(endmarker)[:len(endmarker)-1]) + "/20,0,1/1000x1000?access_token=pk.eyJ1IjoibmluamF3aWxsNTQzIiwiYSI6ImNsZDRidWdrNjBvbDczcW9jajU5c3UxdXAifQ._jM-ztlL3-V9_0WjlFB01A")
+
+	return "https://api.mapbox.com/styles/v1/ninjawill543/cld4bwm4c000h01tbd9cr3hun/static/" + string([]rune(endmarker)[:len(endmarker)-1]) + "/20,0,1/1000x1000?access_token=pk.eyJ1IjoibmluamF3aWxsNTQzIiwiYSI6ImNsZDRidWdrNjBvbDczcW9jajU5c3UxdXAifQ._jM-ztlL3-V9_0WjlFB01A"
 }
 
+func SendMaps(locationData Locations) []string {
+	var urls []string
+	for _, i := range locationData.Index {
+		urls = append(urls, SendMarker(i.Locations))
+	}
 
-
-// func main() {
-// 	sendMarker([]string{"playa_del_carmen-mexico","papeete-french_polynesia","noumea-new_caledonia"})
-	
-// }
-
+	return urls
+}	
