@@ -4,56 +4,90 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Lien vers l'icon du site -->
     <link rel="shortcut icon" href="./assets/img/favicon.png" type="image/x-icon">
+    <!-- Lien vers le style du site  -->
     <link rel="stylesheet" href="./assets/css/style.css">
+    <!-- Titre du site -->
     <title>Groupie Tracker</title>
 </head>
 <body>
-    <div id="dots-flow">
+    <!-- Animation de chargement -->
+    <div id="dots-flow"></div>
 
-    </div>
     <section id="loading">
+        <!-- Récupération des informations dans une variable -->
         {{$data := .}}
+        <!-- Navigation latérale contenent les filtres -->
         <div id="mySidenav" class="sidenav">
+            <!-- Bouton de fermeture de la navigation latérale -->
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <!-- Formulaire des filtres -->
             <form action="/" method="POST">
+                <!-- Label du bouton de la date de creation minimum -->
                 <label for="creation-date-min" id="creation-date-min-label">Creation date (min): </label>
+                <!-- Bouton pour choisir la date de creation minimum dans les filtres -->
                 <input onchange="creationDateMin()" type="range" name="creation-date-min" id="creation-date-min" min="1900" max="2022" value="1900">
+                <!-- Label du bouton de la date de creation maximum -->
                 <label for="creation-date-max" id="creation-date-max-label">Creation date (max): </label>
+                <!-- Bouton pour choisir la date de creation maximum dans les filtres -->
                 <input onchange="creationDateMax()" type="range" name="creation-date-max" id="creation-date-max" min="1900" max="2022" value="2022">
+                <!-- Label du bouton de la date minimum du première album -->
                 <label for="first-album-date-min" id="first-album-date-min-label">First album date (min): </label>
+                <!-- Bouton pour choisir la date minimum du première album dans les filtres -->
                 <input onchange="firstAlbumDateMin()" type="range" name="first-album-date-min" id="first-album-date-min" min="1900" max="2022" value="1900">
+                <!-- Label du bouton de la date maximum du première album -->
                 <label for="first-album-date-max" id="first-album-date-max-label">First album date (max): </label>
+                <!-- Bouton pour choisir la date maximum du première album dans les filtres -->
                 <input onchange="firstAlbumDateMax()" type="range" name="first-album-date-max" id="first-album-date-max" min="1900" max="2022" value="2022">
+                <!-- Text montrant les cases à cocher des membres -->
                 <p>Members:</p>
                 <div>
+                    <!-- Label de la case à cocher pour 1 membre -->
                     <label for="one-member">1</label>
+                    <!-- Case à cocher pour filtrer les groupes avec 1 membre -->
                     <input type="checkbox" name="one-member" id="one-member">
+                    <!-- Label de la case à cocher pour 2 membres -->
                     <label for="two-members">2</label>
+                    <!-- Case à cocher pour filtrer les groupes avec 2 membres -->
                     <input type="checkbox" name="two-members" id="two-members">
+                    <!-- Label de la case à cocher pour 3 membres -->
                     <label for="three-members">3</label>
+                    <!-- Case à cocher pour filtrer les groupes avec 3 membres -->
                     <input type="checkbox" name="three-members" id="three-members">
+                    <!-- Label de la case à cocher pour 4 membres -->
                     <label for="four-members">4</label>
+                    <!-- Case à cocher pour filtrer les groupes avec 4 membres -->
                     <input type="checkbox" name="four-members" id="four-members">
+                    <!-- Label de la case à cocher pour 5 membres -->
                     <label for="five-members">5</label>
+                    <!-- Case à cocher pour filtrer les groupes avec 5 membres -->
                     <input type="checkbox" name="five-members" id="five-members">
+                    <!-- Label de la case à cocher pour 6 membres -->
                     <label for="six-members">6</label>
+                    <!-- Case à cocher pour filtrer les groupes avec 6 membres -->
                     <input type="checkbox" name="six-members" id="six-members">
+                    <!-- Label de la case à cocher pour 7 membres -->
                     <label for="seven-members">7</label>
+                    <!-- Case à cocher pour filtrer les groupes avec 6 membres -->
                     <input type="checkbox" name="seven-members" id="seven-members">
                 </div>
+                <!-- Label pour filtrer un lieux de concerts des groupes -->
                 <label for="location">Locations of concerts:</label>
+                <!-- Bouton pour filtrer un lieux de concerts des groupes -->
                 <select name="location" id="location">
                     <option disabled selected>-- Selected a location --</option>
+                    <!-- Boucle sur la liste des locations permettant de créer les options du bouton automatiquement -->
                     {{ range $data.Locations.Index }}
                         {{ range .Locations}}
                         <option value="{{.}}">{{.}}</option>
                         {{ end }}
                     {{ end}}
                 </select>
+                <!-- Bouton pour envoyer les informations du formulaire -->
                 <input type="submit" value="FILTER">
             </form>
-          </div>
+        </div>
           
     
         <main>
@@ -74,15 +108,20 @@
                 <!-- Récupération de la card -->
                 {{ range $k, $v := .Artists }}
                 <div class="card">
+                    <!-- Image du groupe -->
                     <img src={{ $v.Image}} alt={{ $v.Name}}>
                     <div class="info-card">
+                        <!-- Lien vers la fenêtre avec le reste des informations du groupe -->
                         <a href="#popup{{ $k }}">
+                            <!-- Nom du groupe -->
                             <h4>{{ $v.Name}}</h4>
+                            <!-- Boucle sur la liste des membres -->
                             {{ range $v.Members }}
                             <p class="members">- {{ . }}</p>
                             {{ end }}
                         </a>    
                     </div>
+                    <!-- Fenêtre contenant le reste des informations du groupe -->
                     <div id="popup{{ $k }}" class="overlay">
                         <div class="popup">
                             <a class="close" href="#">&times;</a>
@@ -100,8 +139,8 @@
                                     <h2>Concert:</h2>
                                     <p class="concert">{{index $data.Relations $k}}</p>
                                 </div>
-                                <div>
-                                    <iframe src="{{ index $data.Maps $k}}"></iframe>
+                                <div class="map">
+                                    <img src="{{ index $data.Maps $k}}">
                                 </div>
                             </div>
                         </div>
@@ -110,11 +149,13 @@
                 {{end}}
             </div>
         </main>
+        <!-- Bas de page -->
         <footer>
             <!-- Affichage des noms des membres du groupe -->
             <h2>DIEDERICHS Geoffrey | FATH Maël | HANSON Lucas</h2>
         </footer>
     </section>
+    <!-- Lien vers le script javascript -->
     <script src="./assets/index.js"></script>
 </body>
 </html>
