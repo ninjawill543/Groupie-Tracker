@@ -1,5 +1,5 @@
 /*
-Interargit avec l'api donné : https://groupietrackers.herokuapp.com/api
+Interargit avec les apis données : https://groupietrackers.herokuapp.com/api
 */
 
 package apiFunctions
@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"io/ioutil"
-	// "encoding/json"
 )
 
 // Contient les urls de l'api
@@ -41,7 +40,10 @@ func GetId(artistsData Artists, name string) int {
 	return -1 // Si aucun groupe avec ce nom n'a été trouvé
 }
 
+/* Récupère le json en string de l'api groupie trackers locations, et retourne un tableau de 
+string contenant tous les lieux et de concerts du groupe d'id égal à l'index */
 func GetConcerts(relations string) []string {
+	// Récupère toutes les données dans un [][]string
 	var concertsData [][]string
 	var start, inside int
 	for i1, i2 := range relations {
@@ -50,11 +52,12 @@ func GetConcerts(relations string) []string {
 			inside = 1
 		}
 		if (i2 == '}') && (inside == 1) {
-			concertsData = append(concertsData, FormatConcertString(relations[start: i1+1]))	
+			concertsData = append(concertsData, FormatConcertString(relations[start: i1+1]))
 			inside = 0
 		}
 	}
 
+	// Formate les données en un string par groupe pour les afficher
 	var data []string
 	index := 0
 	for _, i := range concertsData {
@@ -68,6 +71,7 @@ func GetConcerts(relations string) []string {
 	return data
 }
 
+// Récupères les données sans caractères spéciaux du json
 func FormatConcertString(s string) []string {
 	var formated []string
 	var index, start, iteration, length int = 0, -1, 0, 0

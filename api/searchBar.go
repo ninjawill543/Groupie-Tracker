@@ -1,3 +1,7 @@
+/*
+Fonctions de recherches dans les données reçut par l'api en fonction de saisies de l'utilisateur
+*/
+
 package apiFunctions
 
 import (
@@ -5,92 +9,94 @@ import (
 	"strconv"
 )
 
+/* Recherche une donnée égale la saisie de l'utilisateur parmis les données suivantes :
+nom du groupe, année du premier album, année de création du groupe, membres du groupe, lieux de concerts
+Recherche aussi une donnée similaire à la saisir de l'utilisateur parmis les noms de groupes.
+*/
 func Search(input string, artistsData Artists, artistsLocations Locations) []int {
-	input = Minimalize(input)
-	var similarities []int
-	var id []int
-	for _, i := range artistsData {
+	input = Minimalize(input) // Transforme les majuscule de la saisie de l'utilsateur en minuscule
+	var similarities []float64 // Contient les scores de similarités (cf description de CheckSimilarities)
+	var id []int // Contient les ids des groupes avec donnée égale à une saisie
+	for _, i := range artistsData { // Parcours les données
+		// Si la saisie est égale au nom de groupe, l'année du premier album ou l'année de création du groupe
 		if (input == Minimalize(i.Name)) || (input == i.FirstAlbum[len(i.FirstAlbum)-4:]) || (input == strconv.Itoa(i.CreationDate)) {
-			id = append(id, i.ID-1)
-		} else {
-			for _, k := range i.Members {
-				if input == Minimalize(k) {
-					id = append(id, i.ID-1)
+			id = append(id, i.ID-1) // Ajoute l'id
+		} else { // Sinon
+			for _, k := range i.Members { // Parcours les membres du groupe
+				if input == Minimalize(k) { // Si la saisie est égale au nom d'un membre du groupe
+					id = append(id, i.ID-1) // Ajoute l'id
 					break
 				}
 			}
-			if (len(id) == 0) || (id[len(id)-1] != i.ID-1) {
-				for _, k := range artistsLocations.Index[i.ID-1].Locations {
-					if input == Minimalize(k) {
-						id = append(id, i.ID-1)
+			if (len(id) == 0) || (id[len(id)-1] != i.ID-1) { // Si l'id du groupe considéré n'est pas encore ajouté
+				for _, k := range artistsLocations.Index[i.ID-1].Locations { // Parcours les lieux de concerts
+					if input == Minimalize(k) { // Si un lieux est égal à la saisie
+						id = append(id, i.ID-1) // Ajoute l'id
 						break
 					}
 				}
 			}
 		}
-		similarities = append(similarities, CheckSimilarities(input, i.Name))
+		similarities = append(similarities, CheckSimilarities(input, Minimalize(i.Name))) // Ajoute le score de similarité du groupe considéré
 	}
 
-	fmt.Println(id)
+	fmt.Println(id) // Affiche les solutions exactes dans le terminal
 
-	max := 0
-	maxId := 0
-	var maxSimilarities [10]int
-	for i := range maxSimilarities {
+	var max float64 = 0 // Contient le score de similarité max actuel
+	maxId := 0 // Contient l'id associé au score de similarité max actuel
+	var maxSimilarities [12]int // Tableau contenant les 12 groupes avec le score de similarité le plus élevé
+	for i := range maxSimilarities { // Initialise maxSimilarities
 		maxSimilarities[i] = -1
 	}
-	index := 0
-	for index < len(maxSimilarities) {
-		for i1, i2 := range similarities {
-			if i2 > max {
+	index := 0 // Contient l'index actuel de maxSimilarities
+	for index < len(maxSimilarities) { // Tant que l'index est inférieur à la longueur de maxSimilarities
+		for i1, i2 := range similarities { // Parcous similarities
+			if i2 > max { // Si le score de simlilarité actuel est supérieur au max
+				// Parcours les groupes aux scores de similarités les plus élévés trouvé précédemments
 				for k1, k2 := range maxSimilarities {
-					if i1 == k2 {
+					if i1 == k2 { // Si le groupe est déjà dans maxSimilarities, ignore le groupe
 						break
-					} else if k1 == len(maxSimilarities)-1 {
+					} else if k1 == len(maxSimilarities)-1 { // Sinon, devient le nouveau max
 						maxId = i1
 						max = similarities[maxId]
 					}
 				}
 			}
 		}
-		if similarities[maxId] > 0 {
-			for _, i := range maxSimilarities {
-				if maxId == i {
-					break
-				} else if i == maxSimilarities[len(maxSimilarities)-1] {
-					maxSimilarities[index] = maxId
-				}
-			}
+		if max > 0 { // Si le score de similarité du max est supérieur à 0
+			maxSimilarities[index] = maxId // L'ajoute
+		} else { // Sinon (plus de groupe avec score de similarité au-dessus de 0)
+			break // Interrompt la boucle
 		}
-		index++
-		max = 0
+		index++ // Une valeur de plus dans maxSimilarities
+		max = 0 // Réinitialise le max
 	}
-
-	fmt.Println(similarities)
-
-	var solution []int
-	for _, i := range maxSimilarities {
-		if (i > -1) && (similarities[i] > 0) {
-			solution = append(solution, i)
+	
+	var solution []int // Contient la solution a renvoyer
+	for _, i := range maxSimilarities { // Parcours les max
+		if (i > -1) && (similarities[i] > 0) { // Si le max actuel existe
+			solution = append(solution, i) // L'ajoute à la solution
 		}
 	}
-	if len(id) > 0 {
-		for _, i := range id {
-			for k1, k2 := range solution {
-				if i == k2 {
-					solution = append(solution[0:k1], solution[k1+1:]...)
+	if len(id) > 0 { // Si des solutions exactes ont été trouvé
+		for _, i := range id { // Parcours les solutions exactes
+			for k1, k2 := range solution { // Parcous les solutions à renvoyer
+				if i == k2 { // Vérifie la solution exacte est déjà contenue
+					// La met à l'avant des solutions à renvoyer (et supprime l'autre itération)
+					solution = append(solution[0:k1], solution[k1+1:]...) 
 					break
 				}
 			}
-			solution = append([]int{i}, solution...)
+			solution = append([]int{i}, solution...) // Sinon, l'ajoute à l'avant
 		}
 	}
 
-	fmt.Println(solution)
+	fmt.Println(solution) // Affiche la solution dans le terminal
 
-	return solution
+	return solution // renvoie les solutions
 }
 
+// Transforme les majuscule en minuscule d'un string donné
 func Minimalize(s string) string {
 	var solu string
 	for i, _ := range s {
@@ -104,7 +110,9 @@ func Minimalize(s string) string {
 	return solu
 }
 
-func CheckSimilarities(s1 string, s2 string) int {
+/* Retourne le score de similarité entre deux strings donnés :
+un point par charactère en commun, divisé par la longueur du second string */
+func CheckSimilarities(s1 string, s2 string) float64 {
 	similarities := 0
 	for _, k := range s1 {
 		for _, j := range s2 {
@@ -115,16 +123,5 @@ func CheckSimilarities(s1 string, s2 string) int {
 		}
 	}
 
-	return similarities
-}
-
-func Minimum(s [5]int) int {
-	max := s[0]
-	for _, i := range s {
-		if i > max {
-			max = i
-		}
-	}
-
-	return max
+	return float64(similarities)/float64(len(s2))
 }
