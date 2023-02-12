@@ -1,3 +1,5 @@
+//Ce fichier sert à générer une URL qui pointe vers une carte mondiale, qui contient des markers pour chaque lieu de concert d'un artiste
+
 package apiFunctions
 
 import (
@@ -7,6 +9,7 @@ import (
     "net/http"
 )
 
+//Contient les informations de l'api GeoCoding de mapbox
 type Response struct {
 	Type     string   `json:"type"`
 	Query    []string `json:"query"`
@@ -38,6 +41,8 @@ type Response struct {
 	Attribution string `json:"attribution"`
 }
 
+// Cette fonction GetCoords reçoit un lieu de concert, qui est ensuite converti en coordonnées grâce à l'api Geocoding de MapBox, et renvoyé dans la fonction SendMarker
+
 func GetCoords(place string) string {
     resp, err := http.Get("https://api.mapbox.com/geocoding/v5/mapbox.places/" + place + ".json?proximity=ip&limit=1&access_token=pk.eyJ1IjoibmluamF3aWxsNTQzIiwiYSI6ImNsZDRidWdrNjBvbDczcW9jajU5c3UxdXAifQ._jM-ztlL3-V9_0WjlFB01A")
     if err != nil {
@@ -61,6 +66,10 @@ func GetCoords(place string) string {
 
 	return send 
 }
+
+// La fonction SendMarker prend une liste de lieux de concerts pour un artiste, qu'il renvoie une par une dans la fonction GetCoords pour convertir les lieux en coordonnés
+// Ensuite, la liste de coordonnées est placé dans une URL afin de créer une carte avec pour marker chaque lieu de concert.
+// Pour créer la carte, on utilise l'api Static Images de Mapbox
 
 func SendMarker(places []string)string{
 	markerbase := "pin-l-music+dd380f("
