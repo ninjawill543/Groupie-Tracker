@@ -73,7 +73,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	location := r.Form.Get("location")
 
 	// Affiche les filtres utiliser dans le terminal
-	fmt.Println(creationDateMin, creationDateMax, firstAlbumDateMin, firstAlbumDateMax, location, oneMember, twoMember, threeMembers, fourMembers, fiveMembers, sixMembers, sevenMembers )
+	fmt.Println(creationDateMin, creationDateMax, firstAlbumDateMin, firstAlbumDateMax, location, oneMember, twoMembers, threeMembers, fourMembers, fiveMembers, sixMembers, sevenMembers )
 
 	// Filtre les données
 	if len(creationDateMin) > 0 {
